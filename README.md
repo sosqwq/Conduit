@@ -1,6 +1,6 @@
 # Conduit 博客平台
 
-按 RealWorld 规范构建的 Java 25 / Spring Boot / PostgreSQL / React 教学项目。提供注册、登录、读取及更新当前用户的四个账户接口，另有数据库迁移、健康检查和配套中文教程。后续里程碑将加入文章、社交和 React 页面。
+按 RealWorld 规范构建的 Java 25 / Spring Boot / PostgreSQL / React 教学项目。提供四个账户接口和三个个人资料接口，支持匿名查看、关注与取消关注。另有数据库迁移、健康检查和配套中文教程。后续里程碑将加入文章、评论、收藏和 React 页面。
 
 ## 本地启动
 
@@ -46,4 +46,5 @@ curl -sS http://localhost:8080/api/users -H 'Content-Type: application/json' \
 - [里程碑进度与已执行的检查](docs/PROGRESS.md)
 - [第 00 章：项目总览与开发环境](frontend/src/tutorial/chapters/00-environment.md)
 - [第 01 章：注册与登录](frontend/src/tutorial/chapters/01-authentication.md)
+- [第 02 章：资料与关注](frontend/src/tutorial/chapters/02-profiles.md)
 - [官方 Hurl 和 Playwright 测试的版本、运行方法与前置条件](scripts/official.md)

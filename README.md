@@ -1,6 +1,6 @@
 # Conduit 博客平台
 
-按 RealWorld 规范构建的 Java 25 / Spring Boot / PostgreSQL / React 教学项目。支持账户、关注、文章增删改查、标签查询、全站文章列表与个人关注信息流。列表支持按作者、标签和收藏者组合筛选及分页。后续里程碑将加入评论、收藏操作和 React 页面。
+按 RealWorld 规范构建的 Java 25 / Spring Boot / PostgreSQL / React 教学项目。后端提供 19 个 RealWorld 接口，支持账户、关注、文章与标签、评论、收藏，以及按作者、标签和收藏者组合筛选的分页列表。登录用户可阅读关注作者的信息流。React 博客页面与教程阅读器属于后续前端里程碑。
 
 ## 本地启动
 
@@ -49,4 +49,5 @@ curl -sS http://localhost:8080/api/users -H 'Content-Type: application/json' \
 - [第 02 章：资料与关注](frontend/src/tutorial/chapters/02-profiles.md)
 - [第 03 章：文章增删改查](frontend/src/tutorial/chapters/03-articles.md)
 - [第 04 章：文章列表与信息流](frontend/src/tutorial/chapters/04-lists-and-feed.md)
+- [第 05 章：评论与收藏](frontend/src/tutorial/chapters/05-comments-and-favorites.md)
 - [官方 Hurl 和 Playwright 测试的版本、运行方法与前置条件](scripts/official.md)

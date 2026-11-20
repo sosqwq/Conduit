@@ -1,0 +1,51 @@
+.tutorial-page {
+  --tutorial-accent: #28613e;
+  --tutorial-border: #d8e3da;
+  margin: 2.5rem auto 4rem;
+  max-width: 76rem;
+  padding: 0 clamp(1rem, 4vw, 3rem);
+  color: #26362c;
+  line-height: 1.75;
+}
+.tutorial-page a { color: var(--tutorial-accent); }
+.tutorial-page a:focus-visible { outline: 2px solid var(--tutorial-accent); outline-offset: 3px; }
+.tutorial-page h1, .tutorial-page h2, .tutorial-page h3 { color: #1b3625; line-height: 1.35; }
+.tutorial-page h1 { font-size: clamp(1.8rem, 3.3vw, 2.75rem); }
+.tutorial-page h2 { font-size: 1.45rem; }
+.tutorial-page h3 { font-size: 1.15rem; }
+.tutorial-index { max-width: 60rem; }
+.tutorial-intro { border-bottom: 2px solid var(--tutorial-accent); padding-bottom: 1rem; }
+.tutorial-intro p, .tutorial-group li p { color: #526157; }
+.tutorial-group { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); padding: 1.25rem 0 .5rem; }
+.tutorial-group h2 { margin-top: .3rem; }
+.tutorial-group ul, .tutorial-side ol { list-style: none; margin: 0; padding: 0; }
+.tutorial-group li { padding: .25rem 0 .8rem; margin-bottom: .6rem; border-bottom: 1px solid var(--tutorial-border); }
+.tutorial-group li a { font-weight: 650; font-size: 1.08rem; }
+.tutorial-group li p { margin: .3rem 0 0; }
+.tutorial-reader { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); }
+.tutorial-side { position: sticky; top: 1.5rem; align-self: start; border-left: 2px solid var(--tutorial-border); font-size: .92rem; }
+.tutorial-side a { display: block; padding: .35rem .8rem; }
+.tutorial-side [aria-current="page"] { color: #173e25; font-weight: 700; background: #eaf3eb; }
+.tutorial-index-link { font-weight: 700; margin-bottom: .4rem; }
+.tutorial-body, .tutorial-prose { min-width: 0; }
+.tutorial-prose { overflow-wrap: anywhere; }
+.tutorial-prose:focus { outline: none; }
+.tutorial-prose h1 { padding-bottom: .8rem; border-bottom: 2px solid var(--tutorial-accent); }
+.tutorial-prose h2 { margin: 2.5rem 0 1rem; }
+.tutorial-prose h3 { margin: 1.6rem 0 .6rem; }
+.tutorial-prose li { margin-bottom: .4rem; }
+.tutorial-prose table { display: block; overflow-x: auto; border-collapse: collapse; margin: 1.2rem 0; }
+.tutorial-prose th, .tutorial-prose td { text-align: left; vertical-align: top; padding: .5rem .7rem; border: 1px solid var(--tutorial-border); }
+.tutorial-prose th { background: #edf3ee; color: #203e2b; }
+.tutorial-prose code { white-space: normal; color: #274d35; background: #edf3ee; }
+.tutorial-prose pre { overflow-x: auto; background: #f6f8fa; border: 1px solid var(--tutorial-border); border-radius: .35rem; padding: .8rem 1rem; }
+.tutorial-prose pre code { display: block; overflow: visible; padding: 0; background: transparent; color: #24292f; white-space: pre; word-break: normal; overflow-wrap: normal; }
+.tutorial-source { font-size: .84rem; color: #465a4b; margin: 1rem 0 .35rem; }
+.tutorial-pager { display: flex; flex-wrap: wrap; justify-content: space-between; border-top: 1px solid var(--tutorial-border); margin-top: 2.5rem; padding-top: 1.2rem; gap: 1rem; }
+@media (max-width: 48rem) {
+  .tutorial-page { margin-top: 1.5rem; }
+  .tutorial-group, .tutorial-reader { display: block; }
+  .tutorial-group h2 { margin-bottom: .9rem; }
+  .tutorial-side { position: static; margin-bottom: 1.4rem; }
+  .tutorial-side ol { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+}

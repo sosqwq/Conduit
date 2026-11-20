@@ -44,7 +44,7 @@ done
 UI_BASE=$(cat "$run_dir/origin")
 export UI_BASE
 # This must reach Spring through the preview's same-origin /api proxy.
-curl --noproxy '*' -fsS --max-time 5 "$UI_BASE/api/health" | python3 -c 'import json,sys; sys.exit(json.load(sys.stdin).get("status") != "UP")'
+curl --noproxy '*' -fsS --max-time 5 -H "Origin: $UI_BASE" "$UI_BASE/api/health" | python3 -c 'import json,sys; sys.exit(json.load(sys.stdin).get("status") != "UP")'
 
 export NODE_PATH="$PWD/frontend/node_modules${NODE_PATH:+:$NODE_PATH}"
 if [[ ${1:-} == --milestone ]]; then

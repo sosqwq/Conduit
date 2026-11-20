@@ -2,7 +2,8 @@ import react from '@vitejs/plugin-react'
 import { defineConfig } from 'vitest/config'
 
 const proxy = {
-  '/api': { target: process.env.CONDUIT_API_TARGET ?? 'http://127.0.0.1:8080', changeOrigin: true },
+  // Preserve the browser-facing Host so Spring recognizes same-origin requests through Vite.
+  '/api': { target: process.env.CONDUIT_API_TARGET ?? 'http://127.0.0.1:8080', changeOrigin: false },
 }
 
 export default defineConfig({

@@ -1,5 +1,5 @@
 import { lazy, Suspense, type ReactNode } from 'react'
-import { Link, Navigate, NavLink, Route, Routes, useParams } from 'react-router-dom'
+import { Link, Navigate, NavLink, Route, Routes, useParams, useSearchParams } from 'react-router-dom'
 import { useQuery } from '@tanstack/react-query'
 import { useSession } from './auth/session'
 import { api } from './lib/api'
@@ -44,6 +44,12 @@ function RequireSession({ children }: { children: ReactNode }) {
   return children
 }
 
+function HomeRoute() {
+  const [search] = useSearchParams()
+  const page = <HomePage />
+  return search.get('feed') === 'following' ? <RequireSession>{page}</RequireSession> : page
+}
+
 function ProfileHeader() {
   const username = useParams().username ?? ''
   const { user, token } = useSession()
@@ -68,7 +74,7 @@ export function App() {
     <Navbar />
     <main><Suspense fallback={<p className="container" role="status">Loading…</p>}>
       <Routes>
-        <Route index element={<HomePage />} />
+        <Route index element={<HomeRoute />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="settings" element={<RequireSession><SettingsPage /></RequireSession>} />

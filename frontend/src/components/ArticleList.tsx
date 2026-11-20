@@ -78,14 +78,14 @@ function Pagination({ page, last }: { page: number; last: number }) {
 }
 
 export function ArticleList({ filter }: { filter: ArticleFilter }) {
-  const { user, token } = useSession()
+  const { user, token, status } = useSession()
   const { pathname } = useLocation()
   const [search] = useSearchParams()
   const page = pageNumber(search.get('page'))
   const articles = useQuery({
     queryKey: ['articles', user?.username ?? null, filter, page],
     queryFn: ({ signal }) => api<ArticleListResponse>(articlesPath(filter, page), { signal, token: user ? token : null }),
-    enabled: filter.kind !== 'following' || !!user,
+    enabled: status !== 'loading' && (filter.kind !== 'following' || !!user),
   })
   if (articles.isPending) return <p role="status">Loading articles…</p>
   if (articles.isError) return <p role="alert">Unable to load articles. <button onClick={() => void articles.refetch()}>Retry</button></p>

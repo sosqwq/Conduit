@@ -34,7 +34,7 @@
   expect(calls[0].searchParams.get('limit')).toBe('10')
 ```
 
-列表组件把查看者、筛选对象以及页号都写进查询键。TanStack Query 可以区分“全站第 2 页”“同一用户关注流第 2 页”和“游客打开同一标签第 1 页”。`queryFn` 用当前页生成 API 地址，再将库传入的取消信号交给 fetch。`enabled` 限制关注流查询的启动时机，免得登录状态还没恢复就发出匿名请求。
+列表组件把查看者、筛选对象以及页号都写进查询键。TanStack Query 可以区分“全站第 2 页”“同一用户关注流第 2 页”和“游客打开同一标签第 1 页”。`queryFn` 用当前页生成 API 地址，再将库传入的取消信号交给 fetch。`enabled` 让列表先等浏览器恢复身份，再用这次访问对应的查询键读取文章，避免先展示匿名卡片、随后又清空列表。账户验证因服务中断而失败时，访客仍能浏览公开列表；关注流则需要已登录的用户。
 
 来源：`frontend/src/components/ArticleList.tsx`
 
@@ -42,7 +42,7 @@
   const articles = useQuery({
     queryKey: ['articles', user?.username ?? null, filter, page],
     queryFn: ({ signal }) => api<ArticleListResponse>(articlesPath(filter, page), { signal, token: user ? token : null }),
-    enabled: filter.kind !== 'following' || !!user,
+    enabled: status !== 'loading' && (filter.kind !== 'following' || !!user),
   })
 ```
 

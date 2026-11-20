@@ -83,3 +83,15 @@ it('retries a failed article query while tags and navigation remain available', 
   fireEvent.click(within(alert).getByRole('button', { name: 'Retry' }))
   expect(await screen.findByRole('heading', { name: 'Recovered article' })).toBeVisible()
 })
+
+it('returns to the last available page when the requested page no longer exists', async () => {
+  open('/tag/news?page=9', url => {
+    if (url.pathname === '/api/tags') return Response.json({ tags: ['news'] })
+    return Response.json({
+      articles: url.searchParams.get('offset') === '10' ? [item('Last article')] : [],
+      articlesCount: 11,
+    })
+  })
+  expect(await screen.findByRole('heading', { name: 'Last article' })).toBeVisible()
+  expect(screen.getByText('/tag/news?page=2', { selector: 'output' })).toBeVisible()
+})

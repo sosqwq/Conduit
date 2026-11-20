@@ -47,12 +47,12 @@ export function articleKey(slug: string, username: string | null) {
 
 **区分页面筛选与按钮状态。** 若地址是 `/profile/lin/favorites`，当前身份却是 zhou，则查询条件应为 `favorited=lin`。小周点击其中某篇的“收藏”，改变的是 zhou 与该文章之间的关系。此时计数会上升，但那篇文章能否继续列在小林的收藏页，仅由小林的关系决定。这个例子解释了为什么不能把路径用户名同时用于写入身份。
 
-**一次点击如何变成预测。** `FavoriteButton` 使用 `useFavorite`，关注按钮使用 `useFollow`，二者共享 `useSocial`。它用 `['social', viewer, kind, target]` 标识一次特定关系，目标可以是文章 slug 或作者用户名。`useMutationState` 让同一关系的不同按钮都能观察最近一次写操作。尚在等待服务器时显示这次操作想要的 `next`，其他时候显示来自查询结果的 `current`。同一关系已有操作进行时，另一个按钮不会再发一次请求；另一篇文章有自己的键，仍可并行操作。
+**一次点击如何变成预测。** `FavoriteButton` 使用 `useFavorite`，关注按钮使用 `useFollow`，二者共享 `useSocial`。它用 `['social', viewer, kind, target]` 标识一次特定关系，目标可以是文章 slug 或作者用户名。`useMutationState` 让同一关系的不同按钮都能观察最近一次写操作。尚在等待服务器且已拿到本次目标值时，组件显示 `next`。若操作变量暂时缺失，`?? current` 会回退到已经确认的数据；未在等待的按钮也显示 `current`。同一关系已有操作进行时，另一个按钮不会再发一次请求；另一篇文章有自己的键，仍可并行操作。
 
 来源：`frontend/src/lib/social.ts`
 
 ```typescript
-    active: pending ? latest.next : current,
+    active: pending ? latest.next ?? current : current,
     pending,
     toggle,
     errors: latest?.status === 'error' ? errorMessages(latest.error) : [],

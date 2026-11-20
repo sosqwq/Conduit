@@ -128,3 +128,44 @@ it('sends guests to login without attempting to change an article', async () => 
   expect(await screen.findByText('Sign in here')).toBeVisible()
   expect(network).not.toHaveBeenCalled()
 })
+
+it('unfavoriting revalidates global, author, favorites and following pages only for the current viewer', async () => {
+  const finish = deferRequest()
+  const client = show()
+  const filters = [{ kind: 'global' }, { kind: 'author', value: 'author' },
+    { kind: 'favorited', value: 'reader' }, { kind: 'following' }]
+  const active = { ...one, favorited: true, favoritesCount: 3 }
+  act(() => {
+    client.setQueryData(detailKey('one'), active)
+    for (const filter of filters) {
+      client.setQueryData(['articles', 'reader', filter, 1], { articles: [active], articlesCount: 1 })
+      client.setQueryData(['articles', 'other', filter, 1], { articles: [one], articlesCount: 1 })
+    }
+  })
+  const button = screen.getByRole('button', { name: 'first' })
+  await waitFor(() => expect(button).toHaveTextContent('on 3'))
+  fireEvent.click(button)
+  await waitFor(() => expect(button).toHaveTextContent('off 2'))
+  expect(network.mock.calls[0][1]?.method).toBe('DELETE')
+  finish(Response.json({ article: one }))
+  await waitFor(() => expect(button).toBeEnabled())
+  for (const filter of filters) {
+    expect(client.getQueryState(['articles', 'reader', filter, 1])?.isInvalidated).toBe(true)
+    expect(client.getQueryState(['articles', 'other', filter, 1])?.isInvalidated).toBe(false)
+  }
+})
+
+it('restores a follow button after failure so the user can retry', async () => {
+  const first = deferRequest()
+  const second = deferRequest()
+  const client = show()
+  fireEvent.click(screen.getByRole('button', { name: 'Follow' }))
+  expect(await screen.findByRole('button', { name: 'Unfollow' })).toBeDisabled()
+  first(Response.json({ errors: { profile: ['forbidden'] } }, { status: 403 }))
+  const retry = await screen.findByRole('button', { name: 'Follow' })
+  expect(retry).toBeEnabled()
+  expect(client.getQueryData<{ profile: Profile }>(profileKey)?.profile.following).toBe(false)
+  fireEvent.click(retry)
+  second(Response.json({ profile: { ...author, following: true } }))
+  await waitFor(() => expect(client.getQueryData<{ profile: Profile }>(profileKey)?.profile.following).toBe(true))
+})

@@ -80,7 +80,11 @@ function useSocial(kind: Kind, target: string, current: boolean) {
   // Pending changes are overlays on server data; failure drops one overlay without restoring an old page.
   const attempts = useMutationState({
     filters: selection,
-    select: m => ({ status: m.state.status, next: (m.state.variables as { next: boolean }).next, error: m.state.error }),
+    select: m => ({
+      status: m.state.status,
+      next: (m.state.variables as { next: boolean } | undefined)?.next,
+      error: m.state.error,
+    }),
   })
   const latest = attempts.at(-1)
   const pending = latest?.status === 'pending'
@@ -89,7 +93,7 @@ function useSocial(kind: Kind, target: string, current: boolean) {
     if (!client.isMutating(selection)) mutation.mutate({ next: !current })
   }
   return {
-    active: pending ? latest.next : current,
+    active: pending ? latest.next ?? current : current,
     pending,
     toggle,
     errors: latest?.status === 'error' ? errorMessages(latest.error) : [],

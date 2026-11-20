@@ -68,3 +68,14 @@ it('keeps the new session if an older validation request finishes late', async (
   await waitFor(() => expect(window.__conduit_debug__?.getAuthState()).toBe('authenticated'))
   expect(localStorage.getItem('jwtToken')).toBe('fresh')
 })
+
+it('keeps the credential presented on a restored session when the server issues a newer JWT', async () => {
+  localStorage.setItem('jwtToken', 'presented')
+  vi.stubGlobal('fetch', vi.fn().mockResolvedValue(Response.json({ user })))
+  const client = show()
+  client.setQueryData(['already-loading'], 1)
+  await screen.findByText('authenticated reader')
+  expect(localStorage.getItem('jwtToken')).toBe('presented')
+  expect(window.__conduit_debug__?.getToken()).toBe('presented')
+  expect(client.getQueryData(['already-loading'])).toBe(1)
+})

@@ -72,8 +72,12 @@ def check_chapters(root):
     chapters = sorted((root / CHAPTERS).glob("*.md"))
     if not chapters:
         return 0, [f"{CHAPTERS} 中没有教程章节"]
-    total = 0
+    expected = [f"{index:02d}" for index in range(10)]
+    numbers = [chapter.name.partition("-")[0] for chapter in chapters]
     errors = []
+    if numbers != expected:
+        errors.append(f"章节编号应各出现一次（{', '.join(expected)}），实际为 {', '.join(numbers)}")
+    total = 0
     for chapter in chapters:
         count, problems = check_chapter(root, chapter)
         total += count

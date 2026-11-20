@@ -15,7 +15,9 @@ test('a guest can open every published chapter from the tutorial index', async (
   await page.goto('/')
   await page.locator('nav a[href="/tutorial"]').click()
   await expect(page).toHaveURL('/tutorial')
-  expect(chapters.length).toBeGreaterThan(0)
+  expect(chapters.map(chapter => chapter.key)).toEqual(
+    Array.from({ length: 10 }, (_, index) => String(index).padStart(2, '0')),
+  )
   for (const chapter of chapters) {
     const link = page.locator(`a[href="/tutorial/${chapter.key}"]`)
     await expect(link).toBeVisible()

@@ -2,7 +2,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from check_snippets import check_chapters
+from check_snippets import check_chapter, check_chapters
 
 
 class ChapterSnippetsTest(unittest.TestCase):
@@ -18,7 +18,7 @@ class ChapterSnippetsTest(unittest.TestCase):
 
     def check(self, markdown):
         self.chapter.write_text(markdown, encoding="utf-8")
-        count, errors = check_chapters(self.root)
+        count, errors = check_chapter(self.root, self.chapter)
         return count, "\n".join(errors)
 
     def test_matches_whole_source_lines_with_crlf(self):
@@ -55,7 +55,9 @@ class ChapterSnippetsTest(unittest.TestCase):
         _, errors = check_chapters(self.root)
         self.assertTrue(errors)
         self.chapter.with_name("01-test.md").write_text("# chapter", encoding="utf-8")
-        count, errors = self.check("来源：`Example.java`\n~~~~java\n}\n~~~~")
+        self.chapter.write_text("来源：`Example.java`\n~~~~java\n}\n~~~~", encoding="utf-8")
+        count, problems = check_chapters(self.root)
+        errors = "\n".join(problems)
         self.assertEqual(1, count)
         self.assertIn("01-test.md", errors)
         self.assertNotIn("00-test.md", errors)

@@ -1,0 +1,55 @@
+name: conduit-production
+
+services:
+  db:
+    image: postgres:17-alpine@sha256:526f86d93c6ea08fd3f1fe5605650cacc781b2c6013169a0ad8f42c7d3d84f32
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: conduit
+      POSTGRES_USER: conduit
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-h", "127.0.0.1", "-U", "conduit", "-d", "conduit"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+
+  api:
+    build: ./backend
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_URL: jdbc:postgresql://db:5432/conduit
+      DATABASE_USERNAME: conduit
+      DATABASE_PASSWORD: ${DATABASE_PASSWORD:?Set DATABASE_PASSWORD}
+      CONDUIT_JWT_SECRET: ${CONDUIT_JWT_SECRET:?Set CONDUIT_JWT_SECRET}
+      CONDUIT_ALLOWED_ORIGINS: ${CONDUIT_ALLOWED_ORIGINS:-}
+      PORT: 8080
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/health"]
+      start_period: 30s
+      interval: 5s
+      timeout: 3s
+      retries: 24
+
+  web:
+    build: ./frontend
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:${CONDUIT_HTTP_PORT:-8080}:8080"
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/api/health"]
+      interval: 5s
+      timeout: 3s
+      retries: 24
+
+volumes:
+  postgres-data:

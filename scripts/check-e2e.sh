@@ -51,7 +51,7 @@ if [[ ${1:-} == --milestone ]]; then
   scripts/e2e-cases.sh "$2" >"$run_dir/cases"
   mapfile -t cases <"$run_dir/cases"
   ./scripts/official.sh e2e "${cases[@]}"
-  frontend/node_modules/.bin/playwright test --config scripts/tutorial.playwright.config.ts
+  frontend/node_modules/.bin/playwright test --config scripts/app.playwright.config.ts
 else
   ./scripts/official.sh e2e "$@"
 fi

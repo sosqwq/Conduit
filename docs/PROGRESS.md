@@ -27,7 +27,7 @@
 | 教程及上游完整性 | 6 项校验器测试通过，第 00–01 章共 11 段代码匹配，204 个上游文件一致 |
 | CI 与阶段标签 | [运行 44815407940](https://github.com/sosqwq/Conduit/actions/runs/44815407940) 成功，正式标签 [m1](https://github.com/sosqwq/Conduit/tree/m1) 指向 a9c7a41 |
 
-## M2 · 资料与关注
+## M2 · 资料与关注（已通过）
 
 匿名读者可查看个人资料。登录后的 following 针对当前读者计算，重复关注和重复取消都能收敛到目标状态。公开资料的四个字段由 ProfileView 定义，关注方向由 follows 联合主键确定。
 
@@ -36,4 +36,4 @@
 | 独立检出与空库 | `./scripts/check.sh` 退出 0，Maven clean verify 成功，15 项测试通过、0 跳过 |
 | 官方接口 | 四份 Hurl 文件共 56 个请求，全部通过 |
 | 教程和官方文件 | 6 项校验器自测通过，17 个教学代码片段匹配，204 个上游文件一致 |
-| 阶段标记 | GitHub Actions 的 verify 作业通过后生成 [m2](https://github.com/sosqwq/Conduit/tree/m2) |
+| 阶段标记 | [运行 44816108957](https://github.com/sosqwq/Conduit/actions/runs/44816108957) 成功，[m2](https://github.com/sosqwq/Conduit/tree/m2) 指向 83b30f1 |

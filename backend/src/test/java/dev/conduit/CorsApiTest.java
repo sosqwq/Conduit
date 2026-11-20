@@ -53,6 +53,16 @@ class CorsApiTest extends PostgresIntegrationTest {
     }
 
     @Test
+    void originApprovalAllowsReadingTheResponseButStillRequiresAValidToken() throws Exception {
+        var request = HttpRequest.newBuilder(URI.create("http://localhost:" + port + "/api/user"))
+                .header("Origin", "https://blog.example").GET().build();
+        var result = client.send(request, HttpResponse.BodyHandlers.ofString());
+        assertThat(result.statusCode()).isEqualTo(401);
+        assertThat(result.headers().firstValue("Access-Control-Allow-Origin")).hasValue("https://blog.example");
+        assertThat(result.body()).contains("is missing");
+    }
+
+    @Test
     void onlyTheJwtFilterCanAuthenticateUsers() {
         assertThat(application.getBeansOfType(org.springframework.security.core.userdetails.UserDetailsService.class))
                 .as("No generated in-memory account").isEmpty();

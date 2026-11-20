@@ -66,6 +66,12 @@
 
 列表读事务采用 PostgreSQL REPEATABLE READ 隔离级别。同一次请求中的总数、当前页与标签来自同一个数据库快照。匿名非空页执行三条查询；已登录请求还会检查令牌中的用户是否存在。偏移量超出结果时直接返回空列表和真实总数。查询只拼接固定条件片段，标签名、作者、收藏者和分页参数均绑定为参数。
 
+### M6 前端与浏览器验收
+
+后端 JSON 和静态页面通过同源 /api 连接。Vite 的开发和预览服务器可代理到不同后端端口。教程用 Vite 的 import.meta.glob 在构建时收集章节。react-markdown 默认处理的 Markdown 语法无法渲染章节中的 GFM 表格，因此加入 remark-gfm；highlight.js 按语言对源码着色。
+
+浏览器验收在本机运行生产前端和真实后端。上游两份测试把模拟请求匹配地址写死在演示域名上。项目自己的 Playwright fixture 只在两份文件注册这些匹配规则时替换地址前缀，使它们指向当前预览的本机 /api。用例、原始处理函数、响应状态及断言保持原样，正常写请求全部进入临时 PostgreSQL。上游单独检查官方演示 API 是否在线的只读 GET 仍然访问官方域名。
+
 ## 首版完整建表 SQL
 
 来源为 `backend/src/main/resources/db/migration/V1__create_conduit.sql`。

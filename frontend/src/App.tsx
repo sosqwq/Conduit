@@ -3,7 +3,7 @@ import { Link, Navigate, NavLink, Route, Routes, useSearchParams } from 'react-r
 import { useSession } from './auth/session'
 import { avatar } from './lib/avatar'
 import { LoginPage, RegisterPage, SettingsPage } from './pages/AccountPages'
-import { HomePage } from './pages/HomePage'
+import { HomePage, TagPage } from './pages/HomePage'
 import { EditorPage } from './pages/EditorPage'
 import { ArticlePage } from './pages/ArticlePage'
 import { ProfilePage } from './pages/ProfilePage'
@@ -56,7 +56,7 @@ export function App() {
     <main><Suspense fallback={<p className="container" role="status">Loading…</p>}>
       <Routes>
         <Route index element={<HomeRoute />} />
-        <Route path="tag/:tag" element={<HomePage />} />
+        <Route path="tag/:tag?" element={<TagPage />} />
         <Route path="article/:slug" element={<ArticlePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />

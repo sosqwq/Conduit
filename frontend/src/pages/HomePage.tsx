@@ -1,8 +1,9 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link, useParams, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useSession } from '../auth/session'
 import { ArticleList, type ArticleFilter } from '../components/ArticleList'
 import { api } from '../lib/api'
+import { tagFromLocation, tagHref } from '../lib/tagRoute'
 
 function FeedTab({ href, label, active }: { href: string; label: string; active: boolean }) {
   return <li className="nav-item"><Link to={href} className={`nav-link${active ? ' active' : ''}`}
@@ -18,13 +19,18 @@ function PopularTags() {
     {tags.isPending && <span role="status">Loading tags…</span>}
     {tags.isError && <div role="alert">Unable to load tags. <button onClick={() => void tags.refetch()}>Retry</button></div>}
     {tags.data && <div className="tag-list">{tags.data.tags.map(tag =>
-      <Link key={tag} to={`/tag/${encodeURIComponent(tag)}`} className="tag-pill tag-default">{tag}</Link>)}</div>}
+      <Link key={tag} to={tagHref(tag)} className="tag-pill tag-default">{tag}</Link>)}</div>}
   </aside>
 }
 
-export function HomePage() {
+export function TagPage() {
+  const { pathname, search } = useLocation()
+  const tag = tagFromLocation(pathname, search)
+  return tag ? <HomePage tag={tag} /> : <Navigate replace to="/" />
+}
+
+export function HomePage({ tag }: { tag?: string }) {
   const { user } = useSession()
-  const { tag } = useParams()
   const [search] = useSearchParams()
   let filter: ArticleFilter = { kind: 'global' }
   if (tag) filter = { kind: 'tag', value: tag }
@@ -40,7 +46,7 @@ export function HomePage() {
         <div className="feed-toggle"><ul className="nav nav-pills outline-active">
           {user && <FeedTab href="/?feed=following" label="Your Feed" active={filter.kind === 'following'} />}
           <FeedTab href="/" label="Global Feed" active={filter.kind === 'global'} />
-          {tag && <FeedTab href={`/tag/${encodeURIComponent(tag)}`} label={`# ${tag}`} active />}
+          {tag && <FeedTab href={tagHref(tag)} label={`# ${tag}`} active />}
         </ul></div>
         <ArticleList filter={filter} />
       </section>

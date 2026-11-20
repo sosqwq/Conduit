@@ -3,7 +3,7 @@ import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { afterEach, expect, it, vi } from 'vitest'
 import { SessionProvider } from '../auth/session'
-import { HomePage } from './HomePage'
+import { HomePage, TagPage } from './HomePage'
 
 const writer = { username: 'writer', email: 'writer@example.test', image: null, bio: null, token: 'jwt' }
 function item(title: string) {
@@ -24,7 +24,7 @@ function open(path: string, respond: (url: URL, options?: RequestInit) => Respon
   vi.stubGlobal('fetch', vi.fn((url: string, options?: RequestInit) => Promise.resolve(respond(new URL(url, 'http://localhost'), options))))
   render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
     <MemoryRouter initialEntries={[path]}><SessionProvider><Location /><Routes>
-      <Route index element={<HomePage />} /><Route path="tag/:tag" element={<HomePage />} />
+      <Route index element={<HomePage />} /><Route path="tag/:tag?" element={<TagPage />} />
     </Routes></SessionProvider></MemoryRouter>
   </QueryClientProvider>)
 }
@@ -111,4 +111,14 @@ it.each([200, 503])('waits for identity before fetching the public feed, even if
   await act(async () => { finish(status === 200 ? Response.json({ user: writer }) : new Response('', { status })) })
   expect(await screen.findByRole('heading', { name: 'Selected feed' })).toBeVisible()
   expect(requests).toEqual([status === 200 ? 'Token jwt' : null])
+})
+
+it('opens a historical percent-encoded path without converting a literal %2F into a slash', async () => {
+  open('/tag/100%252F?page=2', url => {
+    if (url.pathname === '/api/tags') return Response.json({ tags: [] })
+    const title = url.searchParams.get('tag') + ' at ' + url.searchParams.get('offset')
+    return Response.json({ articles: [item(title)], articlesCount: 11 })
+  })
+  expect(await screen.findByRole('heading', { name: '100%2F at 10' })).toBeVisible()
+  expect(screen.getByRole('link', { name: '# 100%2F' })).toHaveAttribute('href', '/tag?tag=100%252F')
 })

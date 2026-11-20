@@ -8,6 +8,7 @@ import { FavoriteButton, FollowButton } from '../components/SocialButtons'
 import { api } from '../lib/api'
 import { articleQuery } from '../lib/articles'
 import { avatar } from '../lib/avatar'
+import { tagHref } from '../lib/tagRoute'
 import { Comments } from './Comments'
 
 export function ArticlePage() {
@@ -65,7 +66,7 @@ function ArticleDetail({ slug }: { slug: string }) {
         <div className="article-content row"><div className="col-md-12">
           <Markdown remarkPlugins={[remarkGfm]} skipHtml>{article.body}</Markdown>
           <div className="tag-list">{article.tagList.map(tag =>
-            <Link key={tag} className="tag-default tag-pill tag-outline" to={`/tag/${encodeURIComponent(tag)}`}>{tag}</Link>)}</div>
+            <Link key={tag} className="tag-default tag-pill tag-outline" to={tagHref(tag)}>{tag}</Link>)}</div>
         </div></div>
         <hr />
         <Comments slug={slug} />

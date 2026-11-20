@@ -75,6 +75,20 @@ class ArticleApiTest extends ApiTest {
     }
 
     @Test
+    void normalizedEquivalentAndNonLatinTitlesHaveWorkingDistinctUrls() throws Exception {
+        String token = register(name());
+        String old = create(token, "Field Guide").get("slug").stringValue();
+        for (String title : List.of("FIELD GUIDE!", "中文标题", "!!!")) {
+            String next = request("PUT", "/articles/" + old, token, Map.of("article", Map.of("title", title)), 200)
+                    .at("/article/slug").stringValue();
+            assertThat(next).isNotBlank().isNotEqualTo(old);
+            request("GET", "/articles/" + old, null, null, 404);
+            request("GET", "/articles/" + next, null, null, 200);
+            old = next;
+        }
+    }
+
+    @Test
     void authenticatedNonAuthorsCannotEditOrDelete() throws Exception {
         String owner = register(name());
         String stranger = register(name());

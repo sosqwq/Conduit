@@ -21,6 +21,20 @@ class BootstrapTest extends PostgresIntegrationTest {
     }
 
     @Test
+    void defaultCorsPolicyAllowsSameOriginAndRejectsCrossOrigin() throws Exception {
+        String origin = "http://localhost:" + port;
+        URI endpoint = URI.create(origin + "/api/health");
+        var client = HttpClient.newHttpClient();
+        var same = client.send(HttpRequest.newBuilder(endpoint).header("Origin", origin).GET().build(),
+                HttpResponse.BodyHandlers.ofString());
+        assertThat(same.statusCode()).isEqualTo(200);
+        var cross = client.send(HttpRequest.newBuilder(endpoint).header("Origin", "https://other.example").GET().build(),
+                HttpResponse.BodyHandlers.ofString());
+        assertThat(cross.statusCode()).isEqualTo(403);
+        assertThat(cross.headers().firstValue("Access-Control-Allow-Origin")).isEmpty();
+    }
+
+    @Test
     void flywayCreatesAllSevenTablesInPostgres() {
         assertThat(jdbc.sql("SELECT version()").query(String.class).single()).startsWith("PostgreSQL");
         var tables = jdbc.sql("""

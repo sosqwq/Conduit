@@ -28,50 +28,50 @@ const SessionContext = createContext<Session | undefined>(undefined)
 export function SessionProvider({ children }: { children: ReactNode }) {
   const client = useQueryClient()
   const request = useRef<AbortController | null>(null)
-  const observedToken = useRef(localStorage.getItem(tokenKey))
   const [session, setSession] = useState<Snapshot>(() => {
     const token = localStorage.getItem(tokenKey)
     return token ? { status: 'loading', token, user: null } : guest
   })
 
+  const current = useRef(session)
+  const publish = useCallback((next: Snapshot) => {
+    current.current = next
+    setSession(next)
+  }, [])
+
   const logout = useCallback(() => {
     request.current?.abort()
-    observedToken.current = null
     localStorage.removeItem(tokenKey)
     client.clear()
-    setSession(guest)
-  }, [client])
+    publish(guest)
+  }, [client, publish])
 
   const accept = useCallback((user: User) => {
     request.current?.abort()
-    observedToken.current = user.token
     localStorage.setItem(tokenKey, user.token)
     client.clear()
-    setSession({ status: 'authenticated', token: user.token, user })
-  }, [client])
+    publish({ status: 'authenticated', token: user.token, user })
+  }, [client, publish])
 
   const restore = useCallback(async () => {
     request.current?.abort()
     const token = localStorage.getItem(tokenKey)
-    if (token !== observedToken.current) {
-      observedToken.current = token
-      client.clear()
-    }
-    if (!token) { setSession(guest); return }
+    if (token !== current.current.token) client.clear()
+    if (!token) { publish(guest); return }
     const controller = new AbortController()
     request.current = controller
-    setSession({ status: 'loading', user: null, token })
+    publish({ status: 'loading', user: null, token })
     try {
       const result = await api<{ user: User }>('/user', { token, signal: controller.signal })
       if (controller.signal.aborted) return
       if (!result?.user?.username || !result.user.token) throw new Error('Invalid user response')
-      setSession({ status: 'authenticated', user: { ...result.user, token }, token })
+      publish({ status: 'authenticated', user: { ...result.user, token }, token })
     } catch (error) {
       if (controller.signal.aborted) return
       if (error instanceof ApiError && error.status >= 400 && error.status < 500) logout()
-      else setSession({ status: 'unavailable', user: null, token })
+      else publish({ status: 'unavailable', user: null, token })
     }
-  }, [client, logout])
+  }, [client, logout, publish])
 
   useEffect(() => {
     void restore()
@@ -84,12 +84,12 @@ export function SessionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => {
     window.__conduit_debug__ = {
-      getToken: () => session.token,
-      getAuthState: () => session.status,
-      getCurrentUser: () => session.user,
+      getToken: () => current.current.token,
+      getAuthState: () => current.current.status,
+      getCurrentUser: () => current.current.user,
     }
     return () => { delete window.__conduit_debug__ }
-  }, [session])
+  }, [])
 
   return <SessionContext.Provider value={{ ...session, accept, logout, retry: restore }}>{children}</SessionContext.Provider>
 }

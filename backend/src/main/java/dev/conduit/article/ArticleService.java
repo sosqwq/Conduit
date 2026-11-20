@@ -52,6 +52,17 @@ public class ArticleService {
         articles.delete(owned(slug, authorId));
     }
 
+    @Transactional
+    public ArticleView setFavorite(String slug, long viewerId, boolean favorite) {
+        Article article = articles.lockBySlug(slug).orElseThrow(ArticleService::notFound);
+        if (favorite) {
+            articles.addFavorite(article.id, viewerId);
+        } else {
+            articles.removeFavorite(article.id, viewerId);
+        }
+        return view(article, viewerId);
+    }
+
     private Article owned(String slug, long authorId) {
         var article = articles.lockBySlug(slug).orElseThrow(ArticleService::notFound);
         if (article.author.getId() != authorId) {

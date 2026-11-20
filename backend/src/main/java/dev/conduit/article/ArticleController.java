@@ -30,6 +30,16 @@ public class ArticleController {
         return new ArticleForms.Response(articles.update(slug, request.article(), CurrentUser.requiredId()));
     }
 
+    @PostMapping("/{slug}/favorite")
+    public ArticleForms.Response favorite(@PathVariable String slug) {
+        return new ArticleForms.Response(articles.setFavorite(slug, CurrentUser.requiredId(), true));
+    }
+
+    @DeleteMapping("/{slug}/favorite")
+    public ArticleForms.Response unfavorite(@PathVariable String slug) {
+        return new ArticleForms.Response(articles.setFavorite(slug, CurrentUser.requiredId(), false));
+    }
+
     @DeleteMapping("/{slug}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable String slug) {

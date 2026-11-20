@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.NativeQuery;
 import org.springframework.data.jpa.repository.Query;
 
@@ -18,6 +19,17 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("select a from Article a where a.slug = :slug")
     Optional<Article> lockBySlug(String slug);
+
+    @Modifying
+    @NativeQuery("""
+            INSERT INTO favorites (user_id, article_id) VALUES (:viewerId, :articleId)
+            ON CONFLICT (user_id, article_id) DO NOTHING
+            """)
+    void addFavorite(long articleId, long viewerId);
+
+    @Modifying
+    @NativeQuery("DELETE FROM favorites WHERE user_id = :viewerId AND article_id = :articleId")
+    void removeFavorite(long articleId, long viewerId);
 
     interface FavoriteStats {
         long getTotal();

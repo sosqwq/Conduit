@@ -1,5 +1,5 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { fireEvent, render, screen, within } from '@testing-library/react'
+import { act, fireEvent, render, screen, within } from '@testing-library/react'
 import { MemoryRouter, Route, Routes, useLocation, useNavigate } from 'react-router-dom'
 import { afterEach, expect, it, vi } from 'vitest'
 import { SessionProvider } from '../auth/session'
@@ -20,7 +20,7 @@ function Location() {
   return <><output>{path.pathname}{path.search}</output><button onClick={() => navigate(-1)}>Back</button></>
 }
 
-function open(path: string, respond: (url: URL, options?: RequestInit) => Response) {
+function open(path: string, respond: (url: URL, options?: RequestInit) => Response | Promise<Response>) {
   vi.stubGlobal('fetch', vi.fn((url: string, options?: RequestInit) => Promise.resolve(respond(new URL(url, 'http://localhost'), options))))
   render(<QueryClientProvider client={new QueryClient({ defaultOptions: { queries: { retry: false } } })}>
     <MemoryRouter initialEntries={[path]}><SessionProvider><Location /><Routes>
@@ -94,4 +94,21 @@ it('returns to the last available page when the requested page no longer exists'
   })
   expect(await screen.findByRole('heading', { name: 'Last article' })).toBeVisible()
   expect(screen.getByText('/tag/news?page=2', { selector: 'output' })).toBeVisible()
+})
+
+it.each([200, 503])('waits for identity before fetching the public feed, even if validation returns %i', async status => {
+  localStorage.setItem('jwtToken', 'jwt')
+  let finish!: (response: Response) => void
+  const validation = new Promise<Response>(resolve => { finish = resolve })
+  const requests: (string | null)[] = []
+  open('/', (url, options) => {
+    if (url.pathname === '/api/user') return validation
+    if (url.pathname === '/api/tags') return Response.json({ tags: [] })
+    requests.push(new Headers(options?.headers).get('Authorization'))
+    return Response.json({ articles: [item('Selected feed')], articlesCount: 1 })
+  })
+  expect(requests).toEqual([])
+  await act(async () => { finish(status === 200 ? Response.json({ user: writer }) : new Response('', { status })) })
+  expect(await screen.findByRole('heading', { name: 'Selected feed' })).toBeVisible()
+  expect(requests).toEqual([status === 200 ? 'Token jwt' : null])
 })

@@ -15,6 +15,7 @@ case "$task" in
     exec python3 scripts/staged_hurl.py "$@"
     ;;
   e2e)
+    export PLAYWRIGHT_HTML_OPEN=never
     export TEST_MODE=spa
     export API_BASE=${API_BASE:-http://127.0.0.1:8080/api}
     export UI_BASE=${UI_BASE:-http://127.0.0.1:5173}

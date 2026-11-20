@@ -3,12 +3,17 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-if [[ ${1:-} == --milestone ]]; then
+browser=()
+if [[ ${1:-} == --e2e ]]; then
+  shift
+  suite=(./scripts/check-e2e.sh "$@")
+elif [[ ${1:-} == --milestone ]]; then
   if [[ $# != 2 || ! ${2:-} =~ ^m[1-9]$ ]]; then
     echo 'Usage: check-api.sh --milestone m1 ... m9 (one milestone)' >&2
     exit 2
   fi
   suite=(./scripts/official.sh api-stage "$2")
+  if [[ $2 =~ ^m[6-9]$ ]]; then browser=(./scripts/check-e2e.sh --milestone "$2"); fi
 else
   suite=(./scripts/official.sh api)
   for name in "$@"; do
@@ -82,7 +87,9 @@ for ((attempt=0; attempt<90; attempt++)); do
   kill -0 "$server_pid" 2>/dev/null || { echo 'Backend exited during startup' >&2; exit 1; }
   port=$(sed -nE 's/.*Tomcat started on port ([0-9]+) .*/\1/p' "$run_dir/server.log" | tail -n 1)
   if [[ -n $port ]] && curl --noproxy '*' -fsS --max-time 2 "http://127.0.0.1:$port/api/health" >/dev/null; then
-    HOST="http://127.0.0.1:$port" "${suite[@]}"
+    export HOST="http://127.0.0.1:$port"
+    "${suite[@]}"
+    if (( ${#browser[@]} )); then "${browser[@]}"; fi
     exit 0
   fi
   sleep 1

@@ -27,6 +27,18 @@ Hurl 的 `--from-entry` 和 `--to-entry` 直接执行官方源文件。每段都
 
 后端启动后，执行 `HOST=http://127.0.0.1:8080 ./scripts/official.sh api`。需要安装支持 JSONPath 计数表达式的 Hurl。测试文件自己在路径中添加 `/api`。默认会运行全部 13 个 Hurl 文件。开发单个里程碑时，亦可在命令后附上游测试文件路径。
 
-前后端启动后，安装前端依赖和对应的 Playwright Chromium，执行 `API_BASE=http://127.0.0.1:8080/api UI_BASE=http://127.0.0.1:5173 ./scripts/official.sh e2e`。套件使用浏览器直接访问接口的 SPA 模式，保留上游的断言、浏览器、重试和所有测试。运行时请使用单独的测试数据库。官方社交用例假设已有名为 `johndoe` 的作者及其文章，部分用例要求全站至少有两位作者的文章。
+## 浏览器验收
 
-固定版本的 E2E 存在地址限制。`health.spec.ts` 直接访问 `https://api.realworld.show/api/tags`。`error-handling.spec.ts` 和 `user-fetch-errors.spec.ts` 拦截的也是这个演示域名上的请求。设置 `API_BASE` 只会改变读取该变量的测试辅助函数。在本机以相对路径访问 `/api` 时，上述拦截无法模拟指定的错误。请在 M8 验收记录中报告这些用例的实际结果。官方选择器、路由、调试接口及头像约定见 [SELECTORS.md](official-specs/specs/e2e/SELECTORS.md)。
+从 M6 开始，`./scripts/check.sh` 使用 Node.js 24，根据 `frontend/package-lock.json` 安装依赖，依次运行 TypeScript 类型检查、ESLint、Vitest 和生产构建。首次使用时会安装对应的 Playwright Chromium。在 Linux 上，若系统还缺少浏览器依赖，可以在 `frontend` 目录运行 `npx playwright install --with-deps --only-shell chromium`。GitHub Actions 会安装这些系统依赖。
+
+脚本在完整 Hurl 验收后复用刚启动的后端和专用测试库。种子脚本通过该应用的回环地址注册或登录 `johndoe` 与第二位作者，各创建一篇带标签的文章。随后启动 Vite 对真实生产构建的预览，浏览器从预览地址发出的 `/api` 请求转发给本轮 Spring Boot 进程。两个服务都只在本机随机端口监听。
+
+M6 运行鉴权、设置、导航及其错误处理等适用的 44 项官方测试。M7 加入已实现的文章页面，累计 109 项。M8 和 M9 不传选择器，由官方配置发现全部 140 项。阶段文件与行号清单见 [e2e-cases.sh](e2e-cases.sh)。每次阶段验收还单独运行教程的浏览器测试，检查匿名访问当时已收录的所有章节以及窄屏深链接。
+
+对刚完成的构建，可用 `./scripts/check-api.sh --e2e auth.spec.ts` 快速重试一个文件，或用 `./scripts/check-api.sh --e2e settings.spec.ts:20 --reporter=line` 定位一个用例。这两个命令独立启动测试数据库、后端、生产预览，只运行所选官方浏览器测试。不传文件名则运行完整官方套件。若服务已由自己启动且已有测试数据，可直接用 `API_BASE=http://127.0.0.1:8080/api UI_BASE=http://127.0.0.1:5173 ./scripts/official.sh e2e`。请确保前端把同源 `/api` 转发到这个专用后端。
+
+### 两份上游用例中的固定地址
+
+上游 `error-handling.spec.ts` 和 `user-fetch-errors.spec.ts` 使用 `page.route` 在浏览器测试中模拟接口错误。它们将匹配地址写为 `https://api.realworld.show/api/…`。本项目仅对这两个文件的字符串路由匹配器，将上述前缀映射为本地预览地址的 `/api/`。Playwright 原生的匹配机制、处理函数、`fulfill`、`abort`、`continue` 与断言照常执行。`continue` 后的请求仍交给本地后端。适配代码见 [official-fixtures.ts](official-fixtures.ts)；上游文件在执行前逐个核验 Git blob ID。
+
+唯一固定的外部健康检查是 `health.spec.ts` 对 `https://api.realworld.show/api/tags` 的只读 GET。该检查保留真实上游响应。在需要显式 HTTPS 出口代理的环境，可以将 `CONDUIT_E2E_HEALTH_PROXY` 设为本机允许的代理 URL，只有这份用例的独立 HTTP 客户端会使用它。官方选择器和路由约定见 [SELECTORS.md](official-specs/specs/e2e/SELECTORS.md)。

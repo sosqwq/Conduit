@@ -1,6 +1,6 @@
 # Conduit 博客平台
 
-按 RealWorld 规范构建的 Java 25 / Spring Boot / PostgreSQL / React 教学项目。后端提供 19 个 RealWorld 接口，支持账户、关注、文章与标签、评论、收藏，以及按作者、标签和收藏者组合筛选的分页列表。登录用户可阅读关注作者的信息流。React 前端支持注册、登录和账户设置，中文教程阅读器可匿名访问。
+按 RealWorld 规范构建的 Java 25 / Spring Boot / PostgreSQL / React 教学项目。后端提供 19 个 RealWorld 接口，支持账户、关注、文章与标签、评论、收藏，以及按作者、标签和收藏者组合筛选的分页列表。登录用户可阅读关注作者的信息流。React 首页提供全站、关注和标签三种分页列表。登录后可以撰写 Markdown 文章、编辑标题与标签、发表评论，访客可以阅读文章和中文教程。
 
 ## 本地启动
 
@@ -50,7 +50,7 @@ curl -sS http://localhost:8080/api/users -H 'Content-Type: application/json' \
 ./scripts/check.sh
 ```
 
-没有 Docker 时，可以在上述命令所在的终端设置 `CONDUIT_TEST_DB_URL`、`CONDUIT_TEST_DB_USERNAME` 和 `CONDUIT_TEST_DB_PASSWORD`，指向一个空的、可写的专用 PostgreSQL 测试库。测试会在其中运行迁移和写入断言。脚本核对教程与上游文件，再安装前端锁定依赖，执行类型检查、Lint、组件测试和生产构建。随后从头打包后端，运行完整 Hurl 套件、当前阶段的官方 Playwright 用例，以及教程浏览器检查。首次执行需要下载 Chromium。每次 push 和 pull request 使用同一入口。
+没有 Docker 时，可以在上述命令所在的终端设置 `CONDUIT_TEST_DB_URL`、`CONDUIT_TEST_DB_USERNAME` 和 `CONDUIT_TEST_DB_PASSWORD`，指向一个空的、可写的专用 PostgreSQL 测试库。测试会在其中运行迁移和写入断言。脚本核对教程与上游文件，再安装前端锁定依赖，执行类型检查、Lint、组件测试和生产构建。随后从头打包后端，运行完整 Hurl 套件、当前阶段的官方 Playwright 用例，以及文章改名和教程导航的浏览器检查。首次执行需要下载 Chromium。每次 push 和 pull request 使用同一入口。
 
 ## 阅读与验收
 

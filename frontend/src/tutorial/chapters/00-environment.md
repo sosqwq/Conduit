@@ -38,7 +38,10 @@
 
 ```java
         context = new SpringApplicationBuilder(ConduitApplication.class)
-                .initializers(c -> database.and("server.port=0").applyTo(c.getEnvironment()))
+                .initializers(c -> {
+                    database.and("server.port=0").applyTo(c.getEnvironment());
+                    customize(c);
+                })
                 .run();
         port = context.getEnvironment().getRequiredProperty("local.server.port", Integer.class);
 ```

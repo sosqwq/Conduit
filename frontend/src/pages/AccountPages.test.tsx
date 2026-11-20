@@ -97,6 +97,16 @@ describe('account forms', () => {
     expect(accept).toHaveBeenCalledWith(updated)
   })
 
+  it('sends an explicitly entered new password without resending the stored profile', async () => {
+    fetchMock.mockResolvedValueOnce(Response.json({ user: { ...account, token: 'fresh' } }))
+    open('/settings')
+    edit('New Password', 'updated passphrase')
+    fireEvent.click(screen.getByRole('button', { name: 'Update Settings' }))
+    expect(await screen.findByText('/profile/ada')).toBeInTheDocument()
+    const init = fetchMock.mock.calls[0][1]
+    expect(JSON.parse(String(init?.body))).toEqual({ user: { password: 'updated passphrase' } })
+  })
+
   it.each([401, 422, 500])('retains the settings form and displays HTTP %i errors', async status => {
     fetchMock.mockResolvedValueOnce(Response.json({ errors: { email: ['could not be updated'] } }, { status }))
     open('/settings')

@@ -1,14 +1,12 @@
 import { lazy, Suspense, type ReactNode } from 'react'
-import { Link, Navigate, NavLink, Route, Routes, useParams, useSearchParams } from 'react-router-dom'
-import { useQuery } from '@tanstack/react-query'
+import { Link, Navigate, NavLink, Route, Routes, useSearchParams } from 'react-router-dom'
 import { useSession } from './auth/session'
-import { api } from './lib/api'
 import { avatar } from './lib/avatar'
-import type { Profile } from './lib/types'
 import { LoginPage, RegisterPage, SettingsPage } from './pages/AccountPages'
 import { HomePage } from './pages/HomePage'
 import { EditorPage } from './pages/EditorPage'
 import { ArticlePage } from './pages/ArticlePage'
+import { ProfilePage } from './pages/ProfilePage'
 
 const TutorialIndex = lazy(() => import('./tutorial/Tutorial').then(module => ({ default: module.TutorialIndex })))
 const TutorialChapter = lazy(() => import('./tutorial/Tutorial').then(module => ({ default: module.TutorialChapter })))
@@ -52,25 +50,6 @@ function HomeRoute() {
   return search.get('feed') === 'following' ? <RequireSession>{page}</RequireSession> : page
 }
 
-function ProfileHeader() {
-  const username = useParams().username ?? ''
-  const { user, token } = useSession()
-  const profile = useQuery({
-    queryKey: ['profile', username, user?.username ?? null],
-    queryFn: ({ signal }) => api<{ profile: Profile }>(`/profiles/${encodeURIComponent(username)}`, { signal, token: user ? token : null }),
-  })
-  const person = profile.data?.profile
-  return <div className="profile-page"><div className="user-info"><div className="container">
-    {profile.isPending && <p>Loading profile…</p>}
-    {profile.isError && <p role="alert">Unable to load this profile.</p>}
-    {person && <>
-      <img alt="" className="user-img" src={avatar(person.image)} />
-      <h4>{person.username}</h4><p>{person.bio ?? ''}</p>
-      {user?.username === person.username && <Link className="btn btn-sm btn-outline-secondary" to="/settings">Edit Profile Settings</Link>}
-    </>}
-  </div></div></div>
-}
-
 export function App() {
   return <>
     <Navbar />
@@ -83,7 +62,8 @@ export function App() {
         <Route path="register" element={<RegisterPage />} />
         <Route path="settings" element={<RequireSession><SettingsPage /></RequireSession>} />
         <Route path="editor/:slug?" element={<RequireSession><EditorPage /></RequireSession>} />
-        <Route path="profile/:username" element={<ProfileHeader />} />
+        <Route path="profile/:username" element={<ProfilePage />} />
+        <Route path="profile/:username/favorites" element={<ProfilePage favorites />} />
         <Route path="tutorial" element={<TutorialIndex />} />
         <Route path="tutorial/:chapter" element={<TutorialChapter />} />
         <Route path="*" element={<section className="container page"><h1>Page not found</h1><Link to="/">Home</Link></section>} />

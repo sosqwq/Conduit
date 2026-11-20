@@ -6,3 +6,5 @@
 .env
 playwright-report/
 test-results/
+.env.production
+.env.production.tmp.*

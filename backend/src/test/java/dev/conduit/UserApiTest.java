@@ -59,6 +59,17 @@ class UserApiTest extends ApiTest {
     }
 
     @Test
+    void malformedCredentialsAndTokensForDeletedUsersAreRejected() throws Exception {
+        String name = username();
+        String token = register(name);
+        assertThat(request("GET", "/user", "broken.token", null, 401)
+                .at("/errors/token/0").stringValue()).isEqualTo("is invalid");
+        jdbc.sql("DELETE FROM users WHERE username = ?").param(name).update();
+        assertThat(request("GET", "/user", token, null, 401)
+                .at("/errors/token/0").stringValue()).isEqualTo("is invalid");
+    }
+
+    @Test
     void patchDistinguishesOmissionFromNullAndChecksTheNewPassword() throws Exception {
         String name = username();
         String token = register(name);

@@ -41,6 +41,8 @@ HTTP 201
 
 进入 MVC 后，`UserController` 的类级路径 `/api` 与方法级路径 `/users` 组合成注册地址。`@RequestBody` 把请求体读为 `RegisterRequest`，`@Valid` 触发字段校验；请求对象也对嵌套的 `user` 开启了校验。因此邮箱格式错误会在进入下面的业务方法前返回 422。`Registration` 的构造方法去掉用户名、邮箱首尾空白，并把邮箱转成小写；密码保持用户提交的字符。
 
+用户名也用于个人主页和关注接口的路径。独立的 `.`、`..`、包含斜杠、反斜杠、分号或百分号的名称在现有 HTTP 路径上无法稳定定位用户。注册和显式改名会拒绝这些值、纯空白名以及保留在名称里的控制字符，并返回 `errors.username` 和 422。中文、带重音的字母、内部普通空格、连字符和夹在字母间的点都能用于用户名。旧账号仍可以邮箱登录，到设置页选择新名字。
+
 来源：`backend/src/main/java/dev/conduit/user/UserService.java`
 
 ```java

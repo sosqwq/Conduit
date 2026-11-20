@@ -29,12 +29,15 @@ class UserProfileNameTest extends ApiTest {
 
     @Test
     void unicodeAndOrdinaryPunctuationRoundTripThroughPublicProfiles() throws Exception {
+        String viewer = register("viewer-" + UUID.randomUUID());
         for (String prefix : new String[]{"小林.读书-", "Amélie-", "two words-", "why?yes#-"}) {
             String name = prefix + UUID.randomUUID();
             var registration = Map.of("user", Map.of("username", name, "email", UUID.randomUUID() + "@example.test",
                     "password", "password123"));
             request("POST", "/users", null, registration, 201);
             assertThat(request("GET", profilePath(name), null, null, 200).at("/profile/username").stringValue()).isEqualTo(name);
+            assertThat(request("POST", profilePath(name) + "/follow", viewer, null, 200)
+                    .at("/profile/following").booleanValue()).isTrue();
         }
     }
 

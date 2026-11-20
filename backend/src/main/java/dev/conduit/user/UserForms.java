@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.util.Locale;
 import tools.jackson.databind.JsonNode;
@@ -11,7 +12,12 @@ import tools.jackson.databind.JsonNode;
 final class UserForms {
     private UserForms() {}
 
-    record Registration(@NotBlank(message = "can't be blank") @Size(max = 100, message = "is too long") String username,
+    // Dot segments are normalized by browsers. Encoded separators, semicolons and percent signs
+    // are rejected by the HTTP stack. Keep ordinary Unicode names, including internal spaces.
+    private static final String PROFILE_SEGMENT = "(?!\\.{1,2}\\z)(?!\\p{Z}+\\z)[^/\\\\;%\\p{Cc}]*";
+
+    record Registration(@NotBlank(message = "can't be blank") @Size(max = 100, message = "is too long")
+                        @Pattern(regexp = PROFILE_SEGMENT, message = "cannot be used in a profile URL") String username,
                         @NotBlank(message = "can't be blank") @Email(message = "is invalid")
                         @Size(max = 254, message = "is too long") String email,
                         @NotBlank(message = "can't be blank") String password) {

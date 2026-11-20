@@ -6,5 +6,5 @@ python3 scripts/check_snippets.py
 bash scripts/official.sh prepare
 CONDUIT_JWT_SECRET=$(openssl rand -base64 48)
 export CONDUIT_JWT_SECRET
-mvn -B -ntp -f backend/pom.xml verify
+mvn -B -ntp -f backend/pom.xml clean verify
 ./scripts/check-api.sh auth errors_auth

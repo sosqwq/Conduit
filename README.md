@@ -80,7 +80,7 @@ curl -sS http://localhost:8080/api/users -H 'Content-Type: application/json' \
 ## 阅读与验收
 
 - [规格](docs/SPEC.md)、[工作方式](docs/WORKFLOW.md)、[系统设计与完整建表 SQL](docs/DESIGN.md)
-- [里程碑进度与已执行的检查](docs/PROGRESS.md)
+- [里程碑进度](docs/PROGRESS.md)、[从空库开始的验收命令和结果](docs/ACCEPTANCE.md)、[独立审查与修复记录](docs/REVIEW.md)
 - [第 00 章：项目总览与开发环境](frontend/src/tutorial/chapters/00-environment.md)
 - [第 01 章：注册与登录](frontend/src/tutorial/chapters/01-authentication.md)
 - [第 02 章：资料与关注](frontend/src/tutorial/chapters/02-profiles.md)

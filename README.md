@@ -63,4 +63,5 @@ curl -sS http://localhost:8080/api/users -H 'Content-Type: application/json' \
 - [第 04 章：文章列表与信息流](frontend/src/tutorial/chapters/04-lists-and-feed.md)
 - [第 05 章：评论与收藏](frontend/src/tutorial/chapters/05-comments-and-favorites.md)
 - [第 06 章：前端骨架与鉴权](frontend/src/tutorial/chapters/06-frontend.md)
+- [第 07 章：首页与文章](frontend/src/tutorial/chapters/07-home-and-articles.md)
 - [官方 Hurl 和 Playwright 测试的版本、运行方法与前置条件](scripts/official.md)

@@ -19,6 +19,7 @@ it('preserves the status and field errors from a rejected write', async () => {
   }, { status: 422 })))
   const failure = await api('/articles', { method: 'POST', body: { article: {} } }).catch(e => e)
   expect(failure).toBeInstanceOf(ApiError)
+  if (!(failure instanceof ApiError)) throw failure
   expect(failure.status).toBe(422)
   expect(errorMessages(failure)).toEqual(["title can't be blank", 'email is invalid'])
 })

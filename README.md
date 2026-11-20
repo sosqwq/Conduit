@@ -65,7 +65,7 @@ curl -sS http://localhost:8080/api/users -H 'Content-Type: application/json' \
 
 在能运行 Docker Compose 的服务器上执行完整网站的启动命令。把域名指向服务器，在已有的 HTTPS 反向代理中将该站点转发到 `127.0.0.1:8080`，或转发到配置的 `CONDUIT_HTTP_PORT`。浏览器通过同一站点的 `/api` 访问 Spring Boot。PostgreSQL 数据放在命名卷中；请备份数据库和服务器上的 `.env.production`。保留同一个数据库密码与 JWT 签名密钥后可重建容器。
 
-`./scripts/init-production-env.sh` 仅首次创建凭据，文件权限是 0600。若拆分前后端部署，后端通过 `CONDUIT_ALLOWED_ORIGINS` 指定允许访问的前端来源，多个来源以逗号分隔，每项包含协议和主机名，非标准端口也需写入。完整站的同源部署可留空。部署完成后，用实际域名打开首页、`/tutorial/09` 与 `/api/health`，再从手机网络复验。当前公开部署状态见[里程碑进度](docs/PROGRESS.md)。
+`./scripts/init-production-env.sh` 仅首次创建凭据，文件权限是 0600。本地同源 HTTP 访问可将 `CONDUIT_ALLOWED_ORIGINS` 留空。若公网 TLS 由反向代理终止，请在 `.env.production` 中把 `CONDUIT_ALLOWED_ORIGINS` 设为浏览器实际使用的 HTTPS 来源，例如 `https://blog.example.org`，并重新执行启动命令。前后端分开部署时也用该变量指定允许访问的前端来源。多个来源以逗号分隔，每项包含协议和主机名，非标准端口也需写入。部署完成后，用实际域名打开首页、`/tutorial/09` 与 `/api/health`，再从手机网络复验。当前公开部署状态见[里程碑进度](docs/PROGRESS.md)。
 
 ## 运行全部自动检查
 

@@ -45,6 +45,7 @@
 
 - M0 固定 PostgreSQL 17 主版本，本地 Compose 与 CI Testcontainers 使用同系列镜像。没有 Docker 的开发环境也可显式指定隔离的真实 PostgreSQL 测试库；同一套断言在两种配置下运行。
 - M0 选用 Spring Initializr 提供的稳定版 Spring Boot 4.2.0，目标 JDK 25。使用 Boot 的 Web MVC、Data JPA 和 Flyway starter，PostgreSQL 驱动及 Flyway 的 PostgreSQL 模块各司其职。
+- 测试固定 JUnit Jupiter 5.14.4。JUnit 的生命周期方法启动真正的 Spring 应用，Spring Boot Test 的 TestPropertyValues 注入测试数据源和随机端口，客户端通过 HTTP 检验结果。这样保留了规格指定的 JUnit 5，且能使用 Spring Boot 4。
 - 后端和前端验收依据固定提交的官方用例。接口 409、摘要省略正文、tagList 顺序和默认头像等细节均以对应断言为准。官方参考地址见 [SPEC.md](SPEC.md)。
 - 开发数据库只绑定本机回环地址，测试库与开发库分开。部署计划由静态前端提供单页路由回退，通过同源 /api 访问应用；分域部署时由环境变量限定允许的前端来源。
 - 各里程碑仅在对应检查通过后打标签。远程仓库及托管平台需由项目所有者指定或授权；状态记录区分本地检查、GitHub Actions 和公网验收。

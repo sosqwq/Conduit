@@ -56,6 +56,12 @@
 
 更新接口按字段是否出现区分保留与清空。更新用户行时使用行锁，数据库唯一约束负责判定同时写入的用户名或邮箱冲突。接口只暴露 username、email、bio、image、token 五个字段。
 
+### M2–M3 关系写入与文章地址
+
+关注关系在 JPA 中映射为 User 的有向多对多自关联。写入使用 PostgreSQL 的 ON CONFLICT DO NOTHING，删除按两个用户 ID 匹配，因此重复操作不会产生重复行。禁止自己关注自己，返回字段 profile 的 422 错误。
+
+文章从实际绑定到 articles.id 的 identity 序列取号，先取得唯一 ID，再生成标题地址。两个不同标题可能只在大小写或标点上有区别。如果新地址恰好等于旧地址，会在 ID 前加入 edit，从而使本次操作前的 URL 失效。纯中文或标点标题使用 article 前缀。标签名称按固定顺序写入以减少并发事务的锁顺序冲突，关联表的 position 保存文章输入顺序。
+
 ## 首版完整建表 SQL
 
 来源为 `backend/src/main/resources/db/migration/V1__create_conduit.sql`。

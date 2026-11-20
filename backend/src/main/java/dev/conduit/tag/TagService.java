@@ -3,6 +3,7 @@ package dev.conduit.tag;
 import dev.conduit.common.ApiException;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -23,6 +24,11 @@ public class TagService {
     @Transactional(readOnly = true)
     public List<String> forArticle(long articleId) {
         return tags.forArticle(articleId);
+    }
+
+    @Transactional(readOnly = true)
+    public Map<Long, List<String>> forArticles(List<Long> articleIds) {
+        return tags.forArticles(articleIds);
     }
 
     @Transactional

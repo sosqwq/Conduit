@@ -7,6 +7,8 @@ import { avatar } from './lib/avatar'
 import type { Profile } from './lib/types'
 import { LoginPage, RegisterPage, SettingsPage } from './pages/AccountPages'
 import { HomePage } from './pages/HomePage'
+import { EditorPage } from './pages/EditorPage'
+import { ArticlePage } from './pages/ArticlePage'
 
 const TutorialIndex = lazy(() => import('./tutorial/Tutorial').then(module => ({ default: module.TutorialIndex })))
 const TutorialChapter = lazy(() => import('./tutorial/Tutorial').then(module => ({ default: module.TutorialChapter })))
@@ -75,10 +77,12 @@ export function App() {
     <main><Suspense fallback={<p className="container" role="status">Loading…</p>}>
       <Routes>
         <Route index element={<HomeRoute />} />
+        <Route path="tag/:tag" element={<HomePage />} />
+        <Route path="article/:slug" element={<ArticlePage />} />
         <Route path="login" element={<LoginPage />} />
         <Route path="register" element={<RegisterPage />} />
         <Route path="settings" element={<RequireSession><SettingsPage /></RequireSession>} />
-        <Route path="editor" element={<RequireSession><section className="container page"><h1>New Article</h1></section></RequireSession>} />
+        <Route path="editor/:slug?" element={<RequireSession><EditorPage /></RequireSession>} />
         <Route path="profile/:username" element={<ProfileHeader />} />
         <Route path="tutorial" element={<TutorialIndex />} />
         <Route path="tutorial/:chapter" element={<TutorialChapter />} />

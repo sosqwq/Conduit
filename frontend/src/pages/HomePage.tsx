@@ -1,43 +1,50 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router-dom'
+import { Link, useParams, useSearchParams } from 'react-router-dom'
 import { useSession } from '../auth/session'
+import { ArticleList, type ArticleFilter } from '../components/ArticleList'
 import { api } from '../lib/api'
-import { avatar } from '../lib/avatar'
-import type { ArticleList } from '../lib/types'
+
+function FeedTab({ href, label, active }: { href: string; label: string; active: boolean }) {
+  return <li className="nav-item"><Link to={href} className={`nav-link${active ? ' active' : ''}`}
+    aria-current={active ? 'page' : undefined}>{label}</Link></li>
+}
+
+function PopularTags() {
+  const tags = useQuery({
+    queryKey: ['tags'],
+    queryFn: ({ signal }) => api<{ tags: string[] }>('/tags', { signal }),
+  })
+  return <aside className="sidebar" aria-label="Popular tags"><p>Popular Tags</p>
+    {tags.isPending && <span role="status">Loading tags…</span>}
+    {tags.isError && <div role="alert">Unable to load tags. <button onClick={() => void tags.refetch()}>Retry</button></div>}
+    {tags.data && <div className="tag-list">{tags.data.tags.map(tag =>
+      <Link key={tag} to={`/tag/${encodeURIComponent(tag)}`} className="tag-pill tag-default">{tag}</Link>)}</div>}
+  </aside>
+}
 
 export function HomePage() {
-  const { status, user, token } = useSession()
-  const viewer = status === 'authenticated' ? token : null
-  const articles = useQuery({
-    queryKey: ['articles', 'global', user?.username ?? null],
-    queryFn: ({ signal }) => api<ArticleList>('/articles?limit=10&offset=0', { token: viewer, signal }),
-  })
+  const { user } = useSession()
+  const { tag } = useParams()
+  const [search] = useSearchParams()
+  let filter: ArticleFilter = { kind: 'global' }
+  if (tag) filter = { kind: 'tag', value: tag }
+  else if (search.get('feed') === 'following') filter = { kind: 'following' }
+
   return <div className="home-page">
     <div className="banner"><div className="container">
       <h1 className="logo-font">conduit</h1>
       <p>A place to share your knowledge.</p>
     </div></div>
-    <div className="container page">
-      <div className="feed-toggle"><ul className="nav nav-pills outline-active">
-        <li className="nav-item"><Link className="nav-link active" to="/">Global Feed</Link></li>
-      </ul></div>
-      {articles.isPending && <p role="status">Loading articles…</p>}
-      {articles.isError && <p role="alert">Unable to load articles. <button onClick={() => void articles.refetch()}>Retry</button></p>}
-      {articles.data?.articles.length === 0 && <div className="empty-feed-message">No articles here yet.</div>}
-      {articles.data?.articles.map(article => <div className="article-preview" key={article.slug}>
-        <div className="article-meta">
-          <Link to={`/profile/${encodeURIComponent(article.author.username)}`}>
-            <img alt="" src={avatar(article.author.image)} />
-          </Link>
-          <div className="info">
-            <Link className="author" to={`/profile/${encodeURIComponent(article.author.username)}`}>{article.author.username}</Link>
-            <time className="date" dateTime={article.createdAt}>{new Date(article.createdAt).toLocaleDateString()}</time>
-          </div>
-        </div>
-        <Link className="preview-link" to={`/article/${encodeURIComponent(article.slug)}`}>
-          <h1>{article.title}</h1><p>{article.description}</p>
-        </Link>
-      </div>)}
-    </div>
+    <div className="container page"><div className="row">
+      <section className="col-xs-12 col-md-9" aria-label="Article feed">
+        <div className="feed-toggle"><ul className="nav nav-pills outline-active">
+          {user && <FeedTab href="/?feed=following" label="Your Feed" active={filter.kind === 'following'} />}
+          <FeedTab href="/" label="Global Feed" active={filter.kind === 'global'} />
+          {tag && <FeedTab href={`/tag/${encodeURIComponent(tag)}`} label={`# ${tag}`} active />}
+        </ul></div>
+        <ArticleList filter={filter} />
+      </section>
+      <div className="col-xs-12 col-md-3"><PopularTags /></div>
+    </div></div>
   </div>
 }

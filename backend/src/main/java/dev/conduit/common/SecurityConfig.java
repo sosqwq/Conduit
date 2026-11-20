@@ -17,6 +17,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 class SecurityConfig {
@@ -44,8 +45,10 @@ class SecurityConfig {
     }
 
     @Bean
-    SecurityFilterChain apiSecurity(HttpSecurity http, TokenService tokens, UserRepository users) throws Exception {
-        return http.csrf(AbstractHttpConfigurer::disable)
+    SecurityFilterChain apiSecurity(HttpSecurity http, TokenService tokens, UserRepository users,
+            UrlBasedCorsConfigurationSource apiCors) throws Exception {
+        return http.cors(cors -> cors.configurationSource(apiCors))
+                .csrf(AbstractHttpConfigurer::disable)
                 .formLogin(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .requestCache(AbstractHttpConfigurer::disable)

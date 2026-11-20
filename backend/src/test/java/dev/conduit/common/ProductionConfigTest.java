@@ -31,6 +31,14 @@ class ProductionConfigTest {
     }
 
     @Test
+    void wildcardPatternsPathsAndUserInfoCannotBecomeAllowedOrigins() {
+        for (String invalid : new String[]{"*", "https://*.example", "https://example/a", "https://name@example",
+                "https://example?debug", "https://example#frag", "https://example:65536", "https://example,"}) {
+            assertThatThrownBy(() -> CorsConfig.parseOrigins(invalid)).isInstanceOf(IllegalArgumentException.class);
+        }
+    }
+
+    @Test
     void productionRequiresAConfiguredSigningKeyOfAtLeast256Bits() throws Exception {
         var environment = production();
         var config = new SecurityConfig();

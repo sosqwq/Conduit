@@ -4,6 +4,7 @@ import remarkGfm from 'remark-gfm'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import { useSession } from '../auth/session'
 import { RequestErrors } from '../components/RequestErrors'
+import { FavoriteButton, FollowButton } from '../components/SocialButtons'
 import { api } from '../lib/api'
 import { articleQuery } from '../lib/articles'
 import { avatar } from '../lib/avatar'
@@ -50,9 +51,12 @@ function ArticleDetail({ slug }: { slug: string }) {
             <Link className="author" to={`/profile/${encodeURIComponent(article.author.username)}`}>{article.author.username}</Link>
             <time className="date" dateTime={article.createdAt}>{new Date(article.createdAt).toLocaleDateString()}</time>
           </div>
-          {viewer === article.author.username && <>
+          {viewer === article.author.username ? <>
             <Link className="btn btn-sm btn-outline-secondary" to={`/editor/${encodeURIComponent(article.slug)}`}>Edit Article</Link>{' '}
             <button className="btn btn-sm btn-outline-danger" disabled={remove.isPending} onClick={deleteArticle}>Delete Article</button>
+          </> : <>
+            <FollowButton profile={article.author} />
+            <FavoriteButton article={article} />
           </>}
         </div>
       </div></div>

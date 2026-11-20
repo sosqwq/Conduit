@@ -2,6 +2,7 @@ import { useQuery } from '@tanstack/react-query'
 import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useSession } from '../auth/session'
 import { api } from '../lib/api'
+import { FavoriteButton } from './SocialButtons'
 import { avatar } from '../lib/avatar'
 import type { ArticleList as ArticleListResponse, ArticleSummary } from '../lib/types'
 
@@ -38,6 +39,7 @@ function ArticlePreview({ article }: { article: ArticleSummary }) {
         <Link className="author" to={profilePath}>{article.author.username}</Link>
         <time className="date" dateTime={article.createdAt}>{dateFormat.format(new Date(article.createdAt))}</time>
       </div>
+      <FavoriteButton article={article} compact />
     </div>
     <Link className="preview-link" to={`/article/${encodeURIComponent(article.slug)}`}>
       <h1>{article.title}</h1><p>{article.description}</p>

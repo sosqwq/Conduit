@@ -22,11 +22,18 @@ public abstract class PostgresIntegrationTest {
     void startApplication() {
         TestPropertyValues database = databaseProperties();
         context = new SpringApplicationBuilder(ConduitApplication.class)
-                .initializers(c -> database.and("server.port=0").applyTo(c.getEnvironment()))
+                .initializers(c -> {
+                    database.and("server.port=0").applyTo(c.getEnvironment());
+                    customize(c);
+                })
                 .run();
         port = context.getEnvironment().getRequiredProperty("local.server.port", Integer.class);
         jdbc = context.getBean(JdbcClient.class);
         transaction = new TransactionTemplate(context.getBean(PlatformTransactionManager.class));
+    }
+
+    protected void customize(ConfigurableApplicationContext application) {
+        // Individual tests may install test-only instrumentation before bean creation.
     }
 
     @AfterAll

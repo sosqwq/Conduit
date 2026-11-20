@@ -18,6 +18,18 @@ class ArticleQueryCountTest extends ApiTest {
     }
 
     @Test
+    void counterObservesBothJdbcClientAndJpaAccountReads() throws Exception {
+        String token = register("counter-" + UUID.randomUUID());
+        long beforeJdbc = counter.total();
+        assertThat(jdbc.sql("SELECT 1").query(Integer.class).single()).isOne();
+        assertThat(counter.total() - beforeJdbc).isEqualTo(1);
+
+        long beforeJpa = counter.total();
+        request("GET", "/user", token, null, 200);
+        assertThat(counter.total() - beforeJpa).isPositive();
+    }
+
+    @Test
     void pagesWithEightDifferentAuthorsUseTheSameNumberOfQueriesAsOneArticle(TestReporter reporter) throws Exception {
         String tag = "measure-" + UUID.randomUUID();
         String viewer = "reader-" + tag;

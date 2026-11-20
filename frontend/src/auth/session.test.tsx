@@ -79,3 +79,19 @@ it('keeps the credential presented on a restored session when the server issues 
   expect(window.__conduit_debug__?.getToken()).toBe('presented')
   expect(client.getQueryData(['already-loading'])).toBe(1)
 })
+
+it('exposes the accepted settings response immediately in the same event turn', () => {
+  let observed: string | null | undefined
+  function AcceptResponse() {
+    const session = useSession()
+    return <button onClick={() => {
+      session.accept({ ...user, bio: 'Second update' })
+      observed = window.__conduit_debug__?.getCurrentUser()?.bio
+    }}>Accept confirmed update</button>
+  }
+  render(<QueryClientProvider client={new QueryClient()}><SessionProvider>
+    <AcceptResponse />
+  </SessionProvider></QueryClientProvider>)
+  fireEvent.click(screen.getByText('Accept confirmed update'))
+  expect(observed).toBe('Second update')
+})

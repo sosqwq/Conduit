@@ -1,0 +1,21 @@
+#root {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+main { flex: 1; }
+a:focus-visible, button:focus-visible {
+  outline: 2px solid var(--brand);
+  outline-offset: 3px;
+}
+.navbar-light .navbar-nav .nav-link { color: #62666a; }
+.navbar-light .navbar-nav .nav-link.active { color: #24282a; }
+.reconnect { display: flex; align-items: center; gap: .45rem; color: #62666a; }
+.reconnect button { padding: .15rem .45rem; background: white; border: 1px solid #bbb; border-radius: .2rem; }
+@media (max-width: 48rem) {
+  .navbar > .container { flex-wrap: wrap; gap: .25rem; }
+  .navbar-nav { flex-wrap: wrap; }
+  .navbar-brand { margin-right: .75rem; }
+  .navbar-nav .nav-item + .nav-item { margin-left: .65rem; }
+  .navbar-nav .nav-link { overflow-wrap: anywhere; }
+}

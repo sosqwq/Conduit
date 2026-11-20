@@ -16,3 +16,21 @@ jobs:
           cache-dependency-path: backend/pom.xml
       - name: Verify with PostgreSQL in Testcontainers
         run: ./scripts/check.sh
+  milestone:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, '[m')
+    needs: verify
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Tag the verified milestone
+        shell: bash
+        run: |
+          set -euo pipefail
+          subject=$(git log -1 --format=%s)
+          if [[ "$subject" =~ ^\[(m[0-9])\][[:space:]] ]]; then
+            tag=${BASH_REMATCH[1]}
+            git tag "$tag" "$GITHUB_SHA"
+            git push origin "refs/tags/$tag"
+          fi

@@ -16,7 +16,7 @@
 
 官方接口断言从 M1 开始执行，官方浏览器用例从 M6 开始执行。阶段标签由通过检查的 GitHub Actions 作业创建。
 
-## M1 · 注册与登录
+## M1 · 注册与登录（已通过）
 
 在新的 PostgreSQL 17.12 测试库中执行注册、登录、读取和更新用户。采用 BCrypt 保存密码，JWT 中的数字 ID 在改名后仍能定位用户。测试以真实 HTTP 覆盖账户冲突、字段校验、匿名请求、无效身份以及更新字段的保留与清空。
 
@@ -25,4 +25,4 @@
 | JUnit 与 Maven | `clean verify` 打包成功，12 项通过，0 项跳过 |
 | 官方 Hurl | `auth.hurl` 20 个请求、`errors_auth.hurl` 23 个请求，全部通过 |
 | 教程及上游完整性 | 6 项校验器测试通过，第 00–01 章共 11 段代码匹配，204 个上游文件一致 |
-| CI 与阶段标签 | [工作流](https://github.com/sosqwq/Conduit/actions/workflows/ci.yml) 对本提交运行，成功后创建 [m1](https://github.com/sosqwq/Conduit/tree/m1) |
+| CI 与阶段标签 | [运行 44815407940](https://github.com/sosqwq/Conduit/actions/runs/44815407940) 成功，正式标签 [m1](https://github.com/sosqwq/Conduit/tree/m1) 指向 a9c7a41 |

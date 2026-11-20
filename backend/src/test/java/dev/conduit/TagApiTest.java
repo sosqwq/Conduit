@@ -39,6 +39,7 @@ class TagApiTest extends ApiTest {
                     Map.of("article", Map.of("tagList", List.of())), 200);
             var surviving = request("GET", "/articles/" + articleTwo.get("slug").stringValue(), null, null, 200);
             assertThat(surviving.at("/article/tagList").values()).extracting(JsonNode::stringValue).containsExactly(second, first);
+            request("DELETE", "/articles/" + articleTwo.get("slug").stringValue(), token, null, 204);
             var tags = request("GET", "/tags", null, null, 200).get("tags");
             assertThat(tags.values()).extracting(JsonNode::stringValue).containsOnlyOnce(first, second);
         }

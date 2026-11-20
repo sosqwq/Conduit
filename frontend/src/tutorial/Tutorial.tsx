@@ -15,7 +15,7 @@ function Paragraph({ node, children }: ComponentProps<'p'> & ExtraProps) {
 
 export function TutorialIndex() {
   return (
-    <main className="tutorial-page tutorial-index" lang="zh-CN">
+    <div className="tutorial-page tutorial-index" lang="zh-CN">
       <header className="tutorial-intro">
         <h1>项目教程</h1>
         <p>第一次阅读可以从第 00 章开始，或按技术方向选择章节。</p>
@@ -37,7 +37,7 @@ export function TutorialIndex() {
           </section>
         )
       })}
-    </main>
+    </div>
   )
 }
 
@@ -60,15 +60,15 @@ export function TutorialChapter() {
 
   if (!current) {
     return (
-      <main className="tutorial-page" lang="zh-CN">
+      <div className="tutorial-page" lang="zh-CN">
         <h1>未找到章节</h1>
         <Link to="/tutorial">返回教程目录</Link>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main className="tutorial-page tutorial-reader" lang="zh-CN">
+    <div className="tutorial-page tutorial-reader" lang="zh-CN">
       <nav className="tutorial-side" aria-label="章节目录">
         <Link className="tutorial-index-link" to="/tutorial">教程目录</Link>
         <ol>
@@ -92,6 +92,6 @@ export function TutorialChapter() {
           {next && <Link to={`/tutorial/${next.id}`}>下一章 · {next.title}</Link>}
         </nav>
       </div>
-    </main>
+    </div>
   )
 }

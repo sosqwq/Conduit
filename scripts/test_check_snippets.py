@@ -60,6 +60,16 @@ class ChapterSnippetsTest(unittest.TestCase):
         self.assertIn("01-test.md", errors)
         self.assertNotIn("00-test.md", errors)
 
+    def test_requires_every_chapter_even_if_a_duplicate_keeps_the_file_count_at_ten(self):
+        example = "来源：`Example.java`\n```java\n}\n```"
+        for index in range(10):
+            (self.chapters / f"{index:02d}-test.md").write_text(example, encoding="utf-8")
+        self.assertEqual(check_chapters(self.root), (10, []))
+        (self.chapters / "05-test.md").rename(self.chapters / "07-extra.md")
+        count, errors = check_chapters(self.root)
+        self.assertEqual(count, 10)
+        self.assertTrue(any("05" in problem and "07" in problem for problem in errors))
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -1,0 +1,9 @@
+package dev.conduit.profile;
+
+import dev.conduit.user.User;
+
+public record ProfileView(String username, String bio, String image, boolean following) {
+    public static ProfileView of(User user, boolean following) {
+        return new ProfileView(user.getUsername(), user.getBio(), user.getImage(), following);
+    }
+}

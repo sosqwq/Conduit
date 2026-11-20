@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestReporter;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,7 +18,7 @@ class ArticleQueryCountTest extends ApiTest {
     }
 
     @Test
-    void pagesWithEightDifferentAuthorsUseTheSameNumberOfQueriesAsOneArticle() throws Exception {
+    void pagesWithEightDifferentAuthorsUseTheSameNumberOfQueriesAsOneArticle(TestReporter reporter) throws Exception {
         String tag = "measure-" + UUID.randomUUID();
         String viewer = "reader-" + tag;
         String token = register(viewer);
@@ -34,14 +35,16 @@ class ArticleQueryCountTest extends ApiTest {
                     """).params(viewer, slug).update();
         }
 
-        checkWidths("/articles?tag=" + tag + "&", null, 3);
-        checkWidths("/articles?tag=" + tag + "&", token, 4);
-        checkWidths("/articles/feed?", token, 4);
+        checkWidths("/articles?tag=" + tag + "&", null, 3, reporter);
+        checkWidths("/articles?tag=" + tag + "&", token, 4, reporter);
+        checkWidths("/articles/feed?", token, 4, reporter);
     }
 
-    private void checkWidths(String path, String token, int budget) throws Exception {
+    private void checkWidths(String path, String token, int budget, TestReporter reporter) throws Exception {
         long one = measure(path, token, 1);
         long eight = measure(path, token, 8);
+        reporter.publishEntry("JDBC executions", String.format("%s (%s): 1 row = %d, 8 rows = %d",
+                path.split("\\?")[0], token == null ? "anonymous" : "authenticated", one, eight));
         assertThat(one).as("%s statements for a one-article page", path).isBetween(1L, (long) budget);
         assertThat(eight).as("%s statements for eight distinct authors", path).isEqualTo(one);
     }

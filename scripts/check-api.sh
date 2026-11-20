@@ -3,15 +3,23 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 
-case_files=()
-for name in "$@"; do
-  path="scripts/official-specs/specs/api/hurl/$name.hurl"
-  if [[ ! $name =~ ^[a-z_]+$ || ! -f $path ]]; then
-    echo "Unknown official Hurl case: $name" >&2
+if [[ ${1:-} == --milestone ]]; then
+  if [[ $# != 2 || ! ${2:-} =~ ^m[1-9]$ ]]; then
+    echo 'Usage: check-api.sh --milestone m1 ... m9 (one milestone)' >&2
     exit 2
   fi
-  case_files+=("$path")
-done
+  suite=(./scripts/official.sh api-stage "$2")
+else
+  suite=(./scripts/official.sh api)
+  for name in "$@"; do
+    path="scripts/official-specs/specs/api/hurl/$name.hurl"
+    if [[ ! $name =~ ^[a-z_]+$ || ! -f $path ]]; then
+      echo "Unknown official Hurl case: $name" >&2
+      exit 2
+    fi
+    suite+=("$path")
+  done
+fi
 hurl --version
 shopt -s nullglob
 jars=(backend/target/*.jar)
@@ -74,7 +82,7 @@ for ((attempt=0; attempt<90; attempt++)); do
   kill -0 "$server_pid" 2>/dev/null || { echo 'Backend exited during startup' >&2; exit 1; }
   port=$(sed -nE 's/.*Tomcat started on port ([0-9]+) .*/\1/p' "$run_dir/server.log" | tail -n 1)
   if [[ -n $port ]] && curl --noproxy '*' -fsS --max-time 2 "http://127.0.0.1:$port/api/health" >/dev/null; then
-    HOST="http://127.0.0.1:$port" ./scripts/official.sh api "${case_files[@]}"
+    HOST="http://127.0.0.1:$port" "${suite[@]}"
     exit 0
   fi
   sleep 1

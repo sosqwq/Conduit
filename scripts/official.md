@@ -8,7 +8,22 @@
 
 无 Docker 时可指定专供测试的 PostgreSQL。设置 `CONDUIT_TEST_DB_URL`（例如 `jdbc:postgresql://127.0.0.1:5433/conduit_test`）、`CONDUIT_TEST_DB_USERNAME`、`CONDUIT_TEST_DB_PASSWORD`，然后运行相同命令。该库会执行迁移并写入测试数据，建议每轮准备新库。验收脚本会生成临时 JWT 签名密钥。
 
-M1 执行 `auth.hurl` 和 `errors_auth.hurl`。打包后，可运行 `./scripts/check-api.sh auth errors_auth` 单独重跑这两份测试。不给文件名时，此脚本执行完整官方套件。
+打包后，运行 `./scripts/check-api.sh --milestone m3` 可重复当前里程碑的验收。M1 完整执行账户与账户错误用例，M2 增加两份资料用例，M3 增加完整标签用例。下表列出 M3 在跨里程碑文件里执行的请求序号，起止均包含。
+
+| 官方文件 | M3 执行的请求 |
+| --- | --- |
+| articles | 1–2、9–17 |
+| errors_articles | 1–4、8–14、17–20 |
+| errors_authorization | 1–5、9 |
+| pagination | 1–3、6–7 |
+| feed | 1–2、4–6、10–12 |
+| comments | 1–2、13 |
+| errors_comments | 3–4、10 |
+| favorites | 1–2、9 |
+
+Hurl 的 `--from-entry` 和 `--to-entry` 直接执行官方源文件。每段都核对实际执行的请求序号；上一段从真实响应捕获的 token、slug、时间戳供同一文件的下一段使用。M4 将 articles、pagination 和 feed 三份文件改为完整执行，并增加 errors_articles 中的未登录信息流检查。M5 起使用上游命令自动发现并完整执行全部 Hurl 文件。
+
+不带参数的 `./scripts/check-api.sh` 随时可运行整套测试。后面列文件名（例如 `auth errors_auth`）可单独重跑指定文件的全部断言。
 
 后端启动后，执行 `HOST=http://127.0.0.1:8080 ./scripts/official.sh api`。需要安装支持 JSONPath 计数表达式的 Hurl。测试文件自己在路径中添加 `/api`。默认会运行全部 13 个 Hurl 文件。开发单个里程碑时，亦可在命令后附上游测试文件路径。
 

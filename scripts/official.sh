@@ -11,6 +11,9 @@ case "$task" in
     export HOST=${HOST:-http://127.0.0.1:8080}
     exec bash scripts/official-specs/specs/api/run-api-tests-hurl.sh "$@"
     ;;
+  api-stage)
+    exec python3 scripts/staged_hurl.py "$@"
+    ;;
   e2e)
     export TEST_MODE=spa
     export API_BASE=${API_BASE:-http://127.0.0.1:8080/api}
@@ -19,7 +22,7 @@ case "$task" in
     exec frontend/node_modules/.bin/playwright test --config scripts/official.playwright.config.ts "$@"
     ;;
   *)
-    echo "Usage: $0 {prepare|api|e2e}" >&2
+    echo "Usage: $0 {prepare|api|api-stage|e2e}" >&2
     exit 2
     ;;
 esac

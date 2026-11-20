@@ -31,6 +31,8 @@ jobs:
           echo "$RUNNER_TEMP/${file%.tar.gz}/bin" >> "$GITHUB_PATH"
       - name: Verify frontend, backend, official suites and tutorial
         run: ./scripts/check.sh
+      - name: Build and verify the production Docker Compose stack
+        run: ./scripts/check-production.sh
   milestone:
     if: github.event_name == 'push' && github.ref == 'refs/heads/main' && startsWith(github.event.head_commit.message, '[m')
     needs: verify

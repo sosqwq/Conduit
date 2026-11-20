@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { Link, useLocation, useSearchParams } from 'react-router-dom'
+import { Link, Navigate, useLocation, useSearchParams } from 'react-router-dom'
 import { useSession } from '../auth/session'
 import { api } from '../lib/api'
 import { avatar } from '../lib/avatar'
@@ -48,18 +48,17 @@ function ArticlePreview({ article }: { article: ArticleSummary }) {
   </div>
 }
 
-function Pagination({ page, total }: { page: number; total: number }) {
+function pageHref(pathname: string, search: URLSearchParams, number: number) {
+  const params = new URLSearchParams(search)
+  if (number > 1) params.set('page', String(number))
+  else params.delete('page')
+  return pathname + (params.size ? `?${params}` : '')
+}
+
+function Pagination({ page, last }: { page: number; last: number }) {
   const { pathname } = useLocation()
   const [search] = useSearchParams()
-  const last = Math.ceil(total / pageSize)
   if (last < 2) return null
-
-  function href(number: number) {
-    const params = new URLSearchParams(search)
-    if (number > 1) params.set('page', String(number))
-    else params.delete('page')
-    return pathname + (params.size ? `?${params}` : '')
-  }
 
   // Keep both ends reachable without drawing thousands of links for a large global feed.
   const pages = [...new Set([1, page - 2, page - 1, page, page + 1, page + 2, last])]
@@ -67,7 +66,7 @@ function Pagination({ page, total }: { page: number; total: number }) {
   return <nav aria-label="Article pages"><ul className="pagination">
     {pages.flatMap((number, index) => {
       const link = <li key={number} className={`page-item${number === page ? ' active' : ''}`}>
-        <Link className="page-link" aria-current={number === page ? 'page' : undefined} to={href(number)}>{number}</Link>
+        <Link className="page-link" aria-current={number === page ? 'page' : undefined} to={pageHref(pathname, search, number)}>{number}</Link>
       </li>
       return index && number > pages[index - 1] + 1
         ? [<li className="page-item disabled" key={`gap-${number}`}><span className="page-link">…</span></li>, link]
@@ -78,6 +77,7 @@ function Pagination({ page, total }: { page: number; total: number }) {
 
 export function ArticleList({ filter }: { filter: ArticleFilter }) {
   const { user, token } = useSession()
+  const { pathname } = useLocation()
   const [search] = useSearchParams()
   const page = pageNumber(search.get('page'))
   const articles = useQuery({
@@ -88,6 +88,8 @@ export function ArticleList({ filter }: { filter: ArticleFilter }) {
   if (articles.isPending) return <p role="status">Loading articles…</p>
   if (articles.isError) return <p role="alert">Unable to load articles. <button onClick={() => void articles.refetch()}>Retry</button></p>
   const { articles: items, articlesCount } = articles.data
+  const last = Math.max(1, Math.ceil(articlesCount / pageSize))
+  if (page > last) return <Navigate replace to={pageHref(pathname, search, last)} />
   return <>
     {items.map(article => <ArticlePreview key={article.slug} article={article} />)}
     {items.length === 0 && <div className="empty-feed-message">
@@ -95,6 +97,6 @@ export function ArticleList({ filter }: { filter: ArticleFilter }) {
         ? <>Your feed is empty. Find authors in the <Link to="/">Global Feed</Link>.</>
         : 'No articles here yet.'}
     </div>}
-    <Pagination page={page} total={articlesCount} />
+    <Pagination page={page} last={last} />
   </>
 }

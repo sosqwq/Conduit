@@ -48,7 +48,7 @@ def seed_author(address, username, title, tag):
                            expected=(201, 409))
     if status == 409:
         status, data = request(address, "POST", "/users/login", {"user": credentials}, expected=(200, 401))
-        if status == 401:
+        if status == 401 or data["user"]["username"] != username:
             # An existing demo account may already own articles under different tags.
             _, page = request(address, "GET", "/articles?" + urlencode({"author": username, "limit": 1}))
             if page["articlesCount"] > 0:

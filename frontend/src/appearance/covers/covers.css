@@ -1,0 +1,12 @@
+:root,
+html[data-skin='grove'] {
+  --cover-image: url('./grove.webp');
+}
+
+html[data-skin='dusk'] {
+  --cover-image: url('./dusk.webp');
+}
+
+html[data-skin='dune'] {
+  --cover-image: url('./dune.webp');
+}

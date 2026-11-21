@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 416" role="img" aria-labelledby="title desc" lang="zh-CN">
+  <title id="title">从一条有向关注关系读出三种查看结果</title>
+  <desc id="desc">小林的 ID 是 17，作者的 ID 是 42。关注关系按 (17, 42) 存储。看同一作者主页时，小林查到关系，得到 true；小周查不到，得到 false；游客跳过关系查询，也得到 false。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <style>
+  .body { font-size:17px; }
+  .stage { font-size:19px; font-weight:700; fill:var(--green); }
+  .icon { fill:none; stroke:var(--ink); stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round; }
+  .action { fill:none; stroke:var(--green); stroke-width:2.5; stroke-linecap:round; }
+  .dot { fill:var(--green); }
+
+  .status { fill:var(--green); font-weight:700; }
+  </style>
+  <defs>
+    <marker id="send" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0l8 4-8 4z" fill="var(--green)"/></marker>
+  </defs>
+  <rect class="paper" width="480" height="416"/>
+  <!-- A directed row in follows; its ordered pair is also the lookup key below. -->
+  <circle class="green" cx="86" cy="69" r="32"/>
+  <circle class="amber" cx="394" cy="69" r="32"/>
+  <g class="icon">
+    <circle cx="86" cy="62" r="7.5"/>
+    <path d="M71 83c1-9 6-13 15-13s14 4 15 13"/>
+    <circle cx="394" cy="62" r="7.5"/>
+    <path d="M379 83c1-9 6-13 15-13s14 4 15 13"/>
+  </g>
+  <text class="body" x="240" y="53" text-anchor="middle">关注</text>
+  <path class="action" d="M123 69H351" marker-end="url(#send)"/>
+  <text class="note" x="240" y="93" text-anchor="middle">follows 中的一行 (17, 42)</text>
+  <text class="label" x="86" y="130" text-anchor="middle">小林 · 17</text>
+  <text class="label" x="394" y="130" text-anchor="middle">作者 · 42</text>
+  <text class="note" x="86" y="153" text-anchor="middle">follower_id</text>
+  <text class="note" x="394" y="153" text-anchor="middle">followee_id</text>
+
+  <path class="line" d="M20 180H460"/>
+  <text class="stage" x="24" y="213">三位读者打开作者主页</text>
+  <rect class="panel" x="20" y="232" width="440" height="163" rx="10"/>
+  <path class="line" d="M20 268H460m-440 43h440m-440 43h440"/>
+  <text class="note" x="33" y="255">谁在看</text>
+  <text class="note" x="137" y="255">对照关系表</text>
+  <text class="note" x="339" y="255">following</text>
+  <text class="body" x="33" y="296">小林 · 17</text>
+  <text class="body" x="137" y="296">(17, 42) 存在</text>
+  <rect class="green" x="337" y="276" width="78" height="28" rx="14"/>
+  <text class="mono status" x="376" y="296" text-anchor="middle">true</text>
+  <text class="body" x="33" y="339">小周 · 23</text>
+  <text class="body" x="137" y="339">(23, 42) 不存在</text>
+  <text class="body" x="376" y="339" text-anchor="middle">false</text>
+  <text class="body" x="33" y="381">游客</text>
+  <text class="body" x="137" y="381">跳过关系查询</text>
+  <text class="body" x="376" y="381" text-anchor="middle">false</text>
+</svg>

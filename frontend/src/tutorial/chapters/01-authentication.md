@@ -58,6 +58,8 @@ HTTP 201
 
 **登录并取当前账户。** 客户端向登录地址提交邮箱和密码，成功后从 `user.token` 取出令牌。Hurl 的 `[Captures]` 会把响应里取出的值保存在变量中，后续请求与浏览器一样发送 `Authorization` 头部。两处请求分别验证“这次密码正确”和“这个令牌能证明请求者的身份”。
 
+![登录时用 BCrypt 核对密码，读取当前账户时改用签名令牌识别用户。](./figures/01-auth.svg)
+
 登录服务先按归一化的邮箱查询用户。若查无账号，下面的 `dummyHash` 是服务启动时生成的占位编码，可让常规长度密码仍经过一次 BCrypt 比较。它不对应任何可登录的用户。`valid` 与账号存在性共同决定结果。验证失败抛出的异常由统一处理器转换成带 `errors.credentials` 的 401，成功时复用注册时的响应组装逻辑。
 
 来源：`backend/src/main/java/dev/conduit/user/UserService.java`

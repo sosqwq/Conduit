@@ -1,0 +1,76 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 452" role="img" aria-labelledby="title desc" lang="zh-CN">
+  <title id="title">登录与读取当前账户的两次请求</title>
+  <desc id="desc">浏览器先提交邮箱与密码。服务端用 BCrypt 核对注册时保存的哈希，成功后签发 JWT。浏览器再携带令牌读取当前账户，服务端校验令牌并按用户 ID 确认账号存在。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <style>
+  .body { font-size:17px; }
+  .stage { font-size:19px; font-weight:700; fill:var(--green); }
+  .icon { fill:none; stroke:var(--ink); stroke-width:1.8; stroke-linejoin:round; stroke-linecap:round; }
+  .action { fill:none; stroke:var(--green); stroke-width:2.5; stroke-linecap:round; }
+  .dot { fill:var(--green); }
+
+  .reply { fill:none; stroke:var(--blue); stroke-width:2.2; stroke-dasharray:5 4; }
+  .reply-dot { fill:var(--blue); }
+  </style>
+  <defs>
+    <marker id="send" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0l8 4-8 4z" fill="var(--green)"/></marker>
+    <marker id="return" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto"><path d="M0 0l8 4-8 4z" fill="var(--blue)"/></marker>
+  </defs>
+  <rect class="paper" width="480" height="452"/>
+  <!-- The vertical rails are the client and the server; each arrow crosses the HTTP boundary. -->
+  <g class="line" stroke-dasharray="3 6">
+    <path d="M54 57V428M426 57V428"/>
+  </g>
+  <g class="panel">
+    <rect x="20" y="16" width="133" height="40" rx="10"/>
+    <rect x="327" y="16" width="133" height="40" rx="10"/>
+  </g>
+  <g class="icon">
+    <rect x="34" y="27" width="22" height="16" rx="2"/>
+    <path d="M41 46h9m-4-3v3M35 31h20"/>
+    <rect x="340" y="27" width="22" height="7" rx="2"/>
+    <rect x="340" y="38" width="22" height="7" rx="2"/>
+    <path d="M344 30.5h2m-2 11h2"/>
+  </g>
+  <text class="label" x="67" y="43">浏览器</text>
+  <text class="label" x="372" y="43">服务端</text>
+
+  <text class="stage" x="74" y="88">登录</text>
+  <text class="body" x="240" y="113" text-anchor="middle">POST /api/users/login · 邮箱与密码</text>
+  <path class="action" d="M54 124H423" marker-end="url(#send)"/>
+  <circle class="dot" cx="54" cy="124" r="4"/>
+  <rect class="green" x="149" y="138" width="278" height="52" rx="7"/>
+  <text class="label" x="167" y="160">BCrypt 核对密码</text>
+  <text class="note" x="167" y="181">与注册时存入数据库的密码哈希匹配</text>
+  <text class="body" x="240" y="216" text-anchor="middle">验证成功，返回签名 JWT</text>
+  <path class="reply" d="M426 226H58" marker-end="url(#return)"/>
+  <circle class="reply-dot" cx="426" cy="226" r="4"/>
+
+  <path class="line" d="M20 245H460"/>
+  <text class="stage" x="74" y="272">读取当前账户</text>
+  <text class="body" x="240" y="299" text-anchor="middle">GET /api/user</text>
+  <text class="note" x="240" y="319" text-anchor="middle">Authorization: Token &lt;JWT&gt;</text>
+  <path class="action" d="M54 331H423" marker-end="url(#send)"/>
+  <circle class="dot" cx="54" cy="331" r="4"/>
+  <rect class="green" x="149" y="344" width="278" height="52" rx="7"/>
+  <text class="label" x="167" y="366">核对签名、签发方及有效期</text>
+  <text class="note" x="167" y="387">按令牌中的用户 ID 确认账号存在</text>
+  <text class="body" x="240" y="420" text-anchor="middle">返回当前账户资料</text>
+  <path class="reply" d="M426 430H58" marker-end="url(#return)"/>
+  <circle class="reply-dot" cx="426" cy="430" r="4"/>
+</svg>

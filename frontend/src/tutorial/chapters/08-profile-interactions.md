@@ -60,6 +60,8 @@ export function articleKey(slug: string, username: string | null) {
 
 **预测怎样撤回。** 以已有两次收藏、当前读者尚未收藏的文章为例：点一下后，预测为真，计数临时显示三。程序没有为此先把整个文章页查出的数组写成新值。若请求失败，该操作离开 pending 状态，按钮自然重新读取已确认数据，回到假和二，并显示本次错误。无需拿着旧的整页快照覆盖缓存。若服务器返回的真实总数是六，成功分支会保存服务端提供的六。
 
+![收藏数从 2 临时显示为 3。若成功响应返回 6，界面采用 6；若请求失败，则回到未收藏的 2 并提示错误。](./figures/08-optimistic.svg)
+
 来源：`frontend/src/lib/social.ts`
 
 ```typescript

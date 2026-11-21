@@ -1,0 +1,64 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 408" role="img" aria-labelledby="title desc" xml:lang="zh-CN">
+  <title id="title">同一篇文章下的评论与收藏</title>
+  <desc id="desc">小林发表文章 12。小周留言两次，分别产生评论 31 和 32；收藏两次，只留下一行用户 7 与文章 12 的关系。小周删除评论 31，文章、另一条评论和收藏都保留。小林删除文章，数据库会清理这篇文章下的评论和收藏。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <style>
+    .icon { fill:none; stroke:var(--green); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+    .rule { fill:none; stroke:var(--edge); stroke-width:1; }
+    .strong { font-size:16px; font-weight:650; }
+  </style>
+  <rect class="paper" width="480" height="408"/>
+  <g>
+    <path class="green" d="M148 18h28l10 10v36h-38z"/>
+    <path class="icon" d="M176 18v11h10m-30 12h21m-21 8h16"/>
+    <text class="label" x="202" y="33">小林的文章</text>
+    <text class="note" x="202" y="60">文章 ID 12</text>
+  </g>
+  <path class="line" d="M240 70v16m-118 26V86h236v26"/>
+  <path class="line" d="m118 106 4 6 4-6m228 0 4 6 4-6"/>
+
+  <g>
+    <path class="icon" d="M50 132h19v12H58l-5 5v-5h-3z"/>
+    <text class="label" x="81" y="145">小周留言两次</text>
+    <rect class="panel" x="18" y="162" width="208" height="91" rx="7"/>
+    <path class="rule" d="M18 207h208"/>
+    <text class="mono" x="31" y="190">#31</text><text x="88" y="190">「明白了」</text>
+    <text class="mono" x="31" y="236">#32</text><text x="88" y="236">「再问一句」</text>
+    <text class="note" text-anchor="middle" x="122" y="278">每条评论各有一个 ID</text>
+  </g>
+  <g>
+    <path class="icon" d="M280 132h13v16l-6.5-4-6.5 4z"/>
+    <text class="label" x="307" y="145">小周收藏两次</text>
+    <rect class="panel" x="254" y="162" width="208" height="91" rx="7"/>
+    <path class="rule" d="M254 207h208m-104-45v91"/>
+    <text class="note" text-anchor="middle" x="306" y="190">用户 ID</text>
+    <text class="note" text-anchor="middle" x="410" y="190">文章 ID</text>
+    <text class="label" text-anchor="middle" x="306" y="237">7</text>
+    <text class="label" text-anchor="middle" x="410" y="237">12</text>
+    <text class="note" text-anchor="middle" x="358" y="278">同一对 ID 只保留一行</text>
+  </g>
+
+  <rect class="blue" x="18" y="304" width="444" height="86" rx="8"/>
+  <text class="strong" x="31" y="334">小周删评论 #31</text>
+  <path class="icon" d="M178 329h23m-5-4 5 4-5 4"/>
+  <text x="216" y="334">文章、#32 和收藏仍在</text>
+  <path class="rule" d="M31 347h418"/>
+  <text class="strong" x="31" y="373">小林删文章 #12</text>
+  <path class="icon" d="M178 368h23m-5-4 5 4-5 4"/>
+  <text x="216" y="373">该文的评论与收藏一并删除</text>
+</svg>

@@ -1,0 +1,75 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 481" role="img" aria-labelledby="title desc">
+  <title id="title">用旧地址保存，按响应中的新地址打开</title>
+  <desc id="desc">用旧 slug 提交 PUT。若响应的 slug 改变，浏览器清除旧详情和旧评论缓存，写入当前作者的新详情，使文章列表与标签缓存过期，并导航至新地址。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <defs>
+    <marker id="arrow" viewBox="0 0 8 8" refX="7" refY="4" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M0 0 8 4 0 8Z" fill="var(--edge)"/>
+    </marker>
+  </defs>
+  <rect class="paper" width="480" height="481"/>
+
+  <rect x="23" y="21" width="155" height="46" rx="7" class="green"/>
+  <g stroke="var(--green)" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m44 49 2-7 10-10 5 5-10 10-7 2Z"/>
+    <path d="m53 35 5 5"/>
+  </g>
+  <text x="73" y="51" class="label">编辑器</text>
+
+  <rect x="306" y="21" width="151" height="46" rx="7" class="blue"/>
+  <g fill="none" stroke="var(--blue)" stroke-width="1.8">
+    <rect x="323" y="33" width="21" height="8" rx="2"/>
+    <rect x="323" y="45" width="21" height="8" rx="2"/>
+    <path d="M327 37h3m-3 12h3"/>
+  </g>
+  <text x="357" y="51" class="label">文章 API</text>
+
+  <path class="line" d="M100 69V204m281-135v110" stroke-dasharray="3 5"/>
+  <path class="line" d="M381 174H101" marker-end="url(#arrow)"/>
+  <path class="line" d="M101 109H380" marker-end="url(#arrow)"/>
+  <g fill="var(--edge)">
+    <circle cx="100" cy="109" r="3"/><circle cx="381" cy="174" r="3"/>
+  </g>
+  <text x="240" y="96" class="mono" text-anchor="middle">PUT /api/articles/old-1</text>
+  <text x="240" y="140" class="note" text-anchor="middle">保存成功，返回完整文章</text>
+  <text x="240" y="163" class="mono" text-anchor="middle">article.slug = new-1</text>
+  <path class="line" d="M100 199v17" marker-end="url(#arrow)"/>
+
+  <rect class="panel" x="23" y="218" width="434" height="168" rx="8"/>
+  <g stroke="var(--edge)" stroke-width="1" opacity=".7">
+    <path d="M23 260h434M42 301h396M42 342h396"/>
+  </g>
+  <text x="43" y="245" class="label">保存后的浏览器缓存</text>
+  <text x="44" y="287" class="note">旧详情与评论 · old-1</text>
+  <text x="44" y="328" class="note">作者所见的新详情 · new-1</text>
+  <text x="44" y="369" class="note">文章列表与标签</text>
+  <g fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="m308 276 8 8m0-8-8 8" stroke="var(--amber)"/>
+    <path d="m306 321 4 4 8-9" stroke="var(--green)"/>
+    <path d="M307 365a6 6 0 1 0 1-6m-1-3v5h5" stroke="var(--blue)"/>
+  </g>
+  <text x="330" y="287" class="note">清除</text>
+  <text x="330" y="328" class="note">写入响应</text>
+  <text x="330" y="369" class="note">标记为过期</text>
+  <path class="line" d="M240 388v21" marker-end="url(#arrow)"/>
+
+  <rect class="green" x="53" y="411" width="374" height="48" rx="24"/>
+  <path d="M74 436h13m-5-6 6 6-6 6" fill="none" stroke="var(--green)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+  <text x="101" y="441" class="label">打开详情</text>
+  <text x="216" y="441" class="mono">/article/new-1</text>
+</svg>

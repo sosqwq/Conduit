@@ -1,0 +1,184 @@
+/* Account and writing desks */
+:is(.auth-page, .settings-page, .editor-page) .container.page {
+  width: min(100% - 2 * var(--skin-gutter), 33rem);
+  max-width: none;
+  padding: 0;
+}
+.editor-page .container.page { width: min(100% - 2 * var(--skin-gutter), 51rem); }
+:is(.auth-page, .settings-page, .editor-page) .row { display: block; margin: 0; }
+:is(.auth-page, .settings-page, .editor-page) .row > .col-xs-12 {
+  max-width: none;
+  margin: 0;
+  padding: clamp(1.4rem, 4vw, 2.6rem);
+  border: 1px solid var(--skin-line);
+  border-radius: var(--skin-radius);
+  background: var(--skin-surface);
+  box-shadow: var(--skin-shadow);
+}
+:is(.auth-page, .settings-page) .row > .col-xs-12 {
+  --form-inset: clamp(1.4rem, 4vw, 2.6rem);
+  overflow: hidden;
+  padding-top: 0;
+}
+:is(.auth-page, .settings-page) .row > .col-xs-12::before {
+  content: '';
+  display: block;
+  height: clamp(3.6rem, 9vw, 5.3rem);
+  margin: 0 calc(-1 * var(--form-inset)) 1.75rem;
+  background: var(--skin-engraving), var(--skin-cover);
+}
+:is(.auth-page, .settings-page, .editor-page) h1 {
+  margin: 0 0 1.25rem;
+  font-size: clamp(2.25rem, 6vw, 3rem);
+  font-weight: var(--skin-title-weight);
+  letter-spacing: -.035em;
+}
+.auth-page h1 { margin-bottom: .45rem; }
+.auth-page h1 + p { margin-bottom: 1.65rem; font-size: .95rem; }
+.auth-page h1 + p a { text-decoration: underline; }
+.auth-page .btn-primary { width: 100%; }
+.settings-page hr { margin-block: 1.5rem; }
+.settings-page .btn-outline-danger { font-size: .88rem; }
+.editor-page h1 { padding-bottom: 1.1rem; border-bottom: 1px solid var(--skin-line); }
+.editor-page input[name='title'] {
+  padding: .7rem 1rem;
+  font: var(--skin-title-weight) 1.5rem/1.4 var(--skin-heading);
+}
+.editor-page textarea[name='body'] {
+  min-height: 17rem;
+  font: 1rem/1.7 ui-monospace, 'SFMono-Regular', Consolas, monospace;
+}
+.editor-page .tag-list:not(:empty) { margin-top: .6rem; }
+.editor-page .tag-list i { margin: 0; font: normal 1rem/1 var(--skin-body); }
+
+/* The same engraved covers carry over from the writing desk to published work. */
+.article-page .banner, .profile-page .user-info {
+  position: relative;
+  isolation: isolate;
+  margin: 0;
+  padding: clamp(2.2rem, 6vw, 5.3rem) 0;
+  color: var(--skin-cover-ink);
+  background: var(--skin-cover);
+  border: 0;
+}
+.article-page .banner::before, .profile-page .user-info::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  pointer-events: none;
+  background: var(--skin-engraving);
+  mask-image: linear-gradient(100deg, transparent 8%, #0003 42%, #000 94%);
+}
+.article-page .banner > .container,
+.article-page > .container.page,
+.profile-page > .container.page,
+.profile-page .user-info > .container {
+  width: min(calc(100% - 2 * var(--skin-gutter)), 48rem);
+  max-width: none;
+  padding-inline: 0;
+}
+.article-page .banner h1 {
+  max-width: 23ch;
+  color: var(--skin-cover-ink);
+  font: var(--skin-title-weight) clamp(2.4rem, 6vw, 4.25rem)/1.08 var(--skin-heading);
+  letter-spacing: -.038em;
+  overflow-wrap: anywhere;
+  text-wrap: balance;
+}
+.article-page .banner .article-meta {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: .6rem;
+  margin: 1.55rem 0 0;
+}
+.article-page .banner .article-meta .info { margin: 0 .6rem 0 0; min-width: 0; }
+.article-page .banner .article-meta .author { color: var(--skin-cover-ink); overflow-wrap: anywhere; }
+.article-page .banner .article-meta .date { color: var(--skin-cover-muted); }
+.article-page .banner .article-meta img, .profile-page .user-info .user-img {
+  border: 2px solid var(--skin-cover-muted);
+  object-fit: cover;
+}
+.article-page .banner .btn { margin-left: 0; opacity: 1; }
+.article-page .banner .btn-outline-danger { border-color: currentColor; background: var(--skin-surface); }
+.article-page .banner .btn-outline-danger:is(:hover, :active, :focus) { color: var(--skin-on-danger); background: var(--skin-danger); }
+#root :is(.article-page .banner, .profile-page .user-info) :focus-visible { outline-color: var(--skin-cover-ink); }
+
+.article-page :is(.article-content, .container.page > .row) { max-width: none; }
+.article-page .article-content > div { min-width: 0; overflow-wrap: anywhere; }
+.article-page .article-content p {
+  margin-bottom: 1.35rem;
+  font-family: var(--skin-heading);
+  font-size: clamp(1.1rem, 2.25vw, 1.28rem);
+  font-weight: 400;
+  line-height: 1.72;
+}
+html[data-skin='dune'] .article-content p { font-family: Georgia, 'Songti SC', 'Noto Serif CJK SC', serif; }
+.article-page .article-content :is(h1, h2, h3, h4, h5, h6) { font-weight: var(--skin-title-weight); line-height: 1.23; letter-spacing: -.025em; }
+.article-page .article-content img { max-width: 100%; height: auto; border-radius: var(--skin-radius); }
+.article-content table { display: block; overflow-x: auto; margin-bottom: 1.2rem; border-collapse: collapse; }
+.article-content :is(td, th) { padding: .52rem .8rem; text-align: left; border: 1px solid var(--skin-line); }
+.article-content th, .article-content :not(pre) > code { background: var(--skin-soft); }
+.article-content :not(pre) > code { padding: .12em .3em; color: var(--skin-accent); }
+.article-content pre { overflow: auto; margin: 1.4rem 0; padding: 1rem; background: var(--skin-soft); border: 1px solid var(--skin-line); border-radius: var(--skin-radius); }
+.article-content blockquote { margin: 1.5rem 0; padding: .25rem 1.2rem; border-inline-start: 3px solid var(--skin-accent); color: var(--skin-muted); }
+.article-content blockquote > :last-child { margin-bottom: 0; }
+.article-content a:not(.tag-default) { text-decoration: underline; }
+.article-content .tag-list { clear: both; padding-top: .6rem; }
+.article-page > .container > hr { margin: 1.6rem 0 2.1rem; }
+
+.article-page .card {
+  overflow-wrap: anywhere;
+  border: 1px solid var(--skin-line);
+  border-radius: var(--skin-radius);
+  background: var(--skin-surface);
+  box-shadow: var(--skin-shadow);
+}
+.article-page .card .card-footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: .5rem;
+  color: var(--skin-muted);
+  background: var(--skin-soft);
+  border-color: var(--skin-line);
+  border-radius: 0 0 var(--skin-radius) var(--skin-radius);
+  font-weight: 400;
+}
+.article-page .card .card-footer::after { display: none; }
+.article-page .card-footer > .btn, .article-page .card-footer > .mod-options { margin-inline-start: auto; }
+.article-page .card .mod-options i { margin: 0; opacity: 1; font-style: normal; }
+.article-page .comment-form .card-block textarea { background: transparent; }
+.article-page .card .date-posted { margin: 0; }
+.article-page .card .comment-author img { object-fit: cover; }
+.article-page .card .card-text { white-space: pre-line; }
+
+.profile-page .user-info { padding-block: 2.5rem; }
+.profile-page .user-info > .container { display: grid; justify-items: center; gap: .55rem; }
+.profile-page .user-info .user-img { width: 78px; height: 78px; margin: 0; }
+.profile-page .user-info h4 {
+  margin: .1rem 0 0;
+  max-width: 100%;
+  font: var(--skin-title-weight) clamp(1.75rem, 4vw, 2.8rem)/1.16 var(--skin-heading);
+  letter-spacing: -.03em;
+  overflow-wrap: anywhere;
+}
+.profile-page .user-info p { margin: 0; color: var(--skin-cover-muted); font-weight: 400; overflow-wrap: anywhere; }
+.profile-page .user-info p:empty { display: none; }
+.profile-page .user-info .action-btn { float: none; margin-top: .3rem; color: var(--skin-accent); border-color: var(--skin-line); }
+.profile-page .user-info .btn-secondary { color: var(--skin-on-accent); }
+.profile-page > .container.page > .row { margin: 0; }
+.profile-page > .container.page section { flex-basis: 100%; max-width: 100%; margin: 0; padding: 0; }
+.profile-page .articles-toggle { margin: 0 0 1rem; border-bottom: 1px solid var(--skin-line); }
+.profile-page .articles-toggle .nav-link { padding: .65rem .85rem; color: var(--skin-muted); font-weight: 600; }
+.profile-page .articles-toggle .nav-link:is(:hover, :focus, .active) {
+  color: var(--skin-accent);
+  background: transparent;
+  border-bottom-color: var(--skin-accent);
+}
+
+@media (max-width: 40rem) {
+  .article-page .banner .article-meta { row-gap: .8rem; }
+  .article-page .banner .article-meta .info { flex: 1 1 calc(100% - 4rem); }
+}

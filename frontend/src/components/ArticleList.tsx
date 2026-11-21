@@ -30,7 +30,7 @@ function articlesPath(filter: ArticleFilter, page: number) {
 
 function ArticlePreview({ article }: { article: ArticleSummary }) {
   const profilePath = `/profile/${encodeURIComponent(article.author.username)}`
-  return <div className="article-preview">
+  return <div className="article-preview journal-entry">
     <div className="article-meta">
       <Link to={profilePath} aria-label={`${article.author.username}'s profile`}>
         <img alt="" src={avatar(article.author.image)} />
@@ -43,9 +43,11 @@ function ArticlePreview({ article }: { article: ArticleSummary }) {
     </div>
     <Link className="preview-link" to={`/article/${encodeURIComponent(article.slug)}`}>
       <h1>{article.title}</h1><p>{article.description}</p>
-      <span>Read more…</span>
-      <ul className="tag-list">{article.tagList.map(tag =>
-        <li className="tag-default tag-pill tag-outline" key={tag}>{tag}</li>)}</ul>
+      <div className="journal-entry-footer">
+        <span className="journal-read">Read more…</span>
+        <ul className="tag-list">{article.tagList.map(tag =>
+          <li className="tag-default tag-pill tag-outline" key={tag}>{tag}</li>)}</ul>
+      </div>
     </Link>
   </div>
 }
@@ -87,17 +89,20 @@ export function ArticleList({ filter }: { filter: ArticleFilter }) {
     queryFn: ({ signal }) => api<ArticleListResponse>(articlesPath(filter, page), { signal, token: user ? token : null }),
     enabled: status !== 'loading' && (filter.kind !== 'following' || !!user),
   })
-  if (articles.isPending) return <p role="status">Loading articles…</p>
-  if (articles.isError) return <p role="alert">Unable to load articles. <button onClick={() => void articles.refetch()}>Retry</button></p>
+  if (articles.isPending) return <p className="journal-query" role="status">Loading articles…</p>
+  if (articles.isError) return <p className="journal-query" role="alert">Unable to load articles. <button className="journal-retry" onClick={() => void articles.refetch()}>Retry</button></p>
   const { articles: items, articlesCount } = articles.data
   const last = Math.max(1, Math.ceil(articlesCount / pageSize))
   if (page > last) return <Navigate replace to={pageHref(pathname, search, last)} />
   return <>
     {items.map(article => <ArticlePreview key={article.slug} article={article} />)}
-    {items.length === 0 && <div className="empty-feed-message">
-      {filter.kind === 'following' && articlesCount === 0
-        ? <>Your feed is empty. Find authors in the <Link to="/">Global Feed</Link>.</>
-        : 'No articles here yet.'}
+    {items.length === 0 && <div className="empty-feed-message journal-empty">
+      <span className="journal-book" aria-hidden="true" />
+      <div>{filter.kind === 'following' && articlesCount === 0
+        ? <p>Your feed is empty. Find authors in the <Link to="/">Global Feed</Link>.</p>
+        : <p>No articles here yet.</p>}
+        {(filter.kind === 'global' || filter.kind === 'tag') && <Link className="journal-tutorial-link" to="/tutorial">Read the tutorial</Link>}
+      </div>
     </div>}
     <Pagination page={page} last={last} />
   </>

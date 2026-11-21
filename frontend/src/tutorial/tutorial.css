@@ -104,6 +104,7 @@ html[data-skin='dune'] .tutorial-page { --tutorial-code-bg: #352923; }
   background: var(--skin-soft);
   white-space: normal;
 }
+.tutorial-prose td code { white-space: nowrap; }
 .tutorial-prose blockquote { margin: 1.1rem 0; padding: .25rem 1rem; border-left: 3px solid var(--skin-control); color: var(--skin-muted); }
 .tutorial-prose blockquote p:last-child { margin-bottom: 0; }
 .tutorial-prose pre {

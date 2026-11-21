@@ -248,7 +248,7 @@ footer .logo-font { color: var(--skin-muted); font: 600 1.4rem/1 'Spectral', Geo
   .navbar .navbar-brand { font-size: 1.85rem; }
   .navbar-brand::before { width: 26px; height: 25px; }
   .navbar > .container > .appearance { margin-left: auto; }
-  .navbar-nav { order: 1; flex: 1 0 100%; justify-content: flex-start; gap: .22rem .95rem; margin: 0; }
+  .navbar-nav { order: 1; flex: 1 0 100%; justify-content: flex-start; gap: .22rem clamp(.4rem, 1.9vw, .7rem); margin: 0; }
   .navbar-light .navbar-nav .nav-link { min-height: 36px; font-size: .84rem; }
   .navbar-light .navbar-nav .nav-link[href='/register'] { padding-inline: .85rem; }
 }

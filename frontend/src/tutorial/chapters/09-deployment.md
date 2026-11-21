@@ -4,6 +4,8 @@
 
 本地开发时，三个进程可能分别由 Maven、Vite 和 Docker 启动。本章改为用 Compose 运行生产栈：入口服务提供 React 的静态文件，并代理 `/api`；Java 服务处理业务；PostgreSQL 保存数据。先从部署机器本地验证这条路径，再将你控制的域名和 HTTPS 入口接入。能否从公网使用，还需要从部署机器之外实际访问该域名。
 
+![生产环境只发布 Web 入口。Nginx 在本地读取静态文件，把同源 API 请求转给 Spring，PostgreSQL 将数据写入命名卷。](./figures/09-deployment.svg)
+
 | 从哪里看 | 访问什么 | 验证什么 |
 | --- | --- | --- |
 | 部署机器本地 | 网页入口、`/api/health` | 静态服务、反向代理、Java 与数据库是否相互连通 |

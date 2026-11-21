@@ -1,0 +1,78 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="480" height="443" viewBox="0 0 480 443" role="img" aria-labelledby="title desc">
+  <title id="title">生产部署中的请求分流与数据卷</title>
+  <desc id="desc">部署机回环地址的默认端口 8080 通到 web 容器。Nginx 在容器内返回静态文件，将教程深链接回退到 index.html，或将同源 API 请求转发到 api:8080。Spring 通过 JDBC 连接 db:5432；PostgreSQL 把数据文件存入 postgres-data 命名卷。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <style>
+  .flow, .reply, .issue-flow, .stroke, .caution-line {
+    fill:none; stroke:var(--green); stroke-width:2; stroke-linecap:round; stroke-linejoin:round;
+  }
+  .flow-head { fill:var(--green); }
+  .network { fill:none; stroke:var(--edge); stroke-width:1.5; stroke-dasharray:5 4; }
+  </style>
+  <defs>
+    <marker id="flow-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path class="flow-head" d="M0 0 10 5 0 10Z"/>
+    </marker>
+  </defs>
+  <rect class="paper" width="480" height="443"/>
+  <rect class="network" x="16" y="86" width="448" height="273" rx="14"/>
+  <text class="note" x="30" y="112">Compose 内部网络</text>
+
+  <!-- Only the web service publishes a loopback port on the deployment host. -->
+  <rect class="panel" x="38" y="20" width="263" height="49" rx="8"/>
+  <g class="stroke">
+    <rect x="51" y="33" width="25" height="19" rx="2"/>
+    <path d="M58 57h12m-6-5v5"/>
+  </g>
+  <text class="note" x="88" y="39">部署机的默认入口</text>
+  <text class="mono" x="88" y="59">127.0.0.1:8080</text>
+  <path class="flow" d="M220 70v63" marker-end="url(#flow-arrow)"/>
+
+  <rect class="panel" x="32" y="135" width="211" height="207" rx="9"/>
+  <path class="line" d="M32 195H243"/>
+  <text class="label" x="48" y="161">Nginx</text>
+  <text class="note" x="48" y="182">web · 入口与静态文件</text>
+  <path class="flow" d="M243 164H333" marker-end="url(#flow-arrow)"/>
+  <text class="mono" x="249" y="152">/api</text>
+
+  <g class="stroke">
+    <path d="M48 221h8l4 4h12v12H48Z"/>
+    <path d="M50 274h15l5 5v15H50Z m15 0v5h5"/>
+  </g>
+  <text class="mono" x="84" y="233">/assets/…</text>
+  <text class="note" x="84" y="254">读取构建文件</text>
+  <text class="mono" x="84" y="286">/tutorial/09</text>
+  <text class="note" x="84" y="306">回退到 index.html</text>
+  <text class="note" x="84" y="327">由 React 打开章节</text>
+
+  <rect class="green" x="335" y="135" width="112" height="60" rx="8"/>
+  <text class="label" x="391" y="159" text-anchor="middle">Spring</text>
+  <text class="mono" x="391" y="182" text-anchor="middle">api:8080</text>
+  <path class="flow" d="M391 196v50" marker-end="url(#flow-arrow)"/>
+  <text class="mono" x="403" y="226">JDBC</text>
+  <path class="amber" d="M335 261c0-7 25-13 56-13s56 6 56 13v52c0 7-25 13-56 13s-56-6-56-13Z"/>
+  <ellipse class="amber" cx="391" cy="261" rx="56" ry="13"/>
+  <text class="label" x="391" y="291" text-anchor="middle">PostgreSQL</text>
+  <text class="mono" x="391" y="313" text-anchor="middle">db:5432</text>
+
+  <path class="flow" d="M391 326v49" marker-end="url(#flow-arrow)"/>
+  <rect class="blue" x="188" y="377" width="259" height="50" rx="8"/>
+  <g class="stroke"><path d="m203 399 14-7 14 7-14 7Zm0 6 14 7 14-7"/></g>
+  <text class="note" x="243" y="398">持久化数据卷</text>
+  <text class="mono" x="243" y="418">postgres-data</text>
+</svg>

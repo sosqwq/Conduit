@@ -58,6 +58,8 @@
 
 **第三步，跟踪服务端和返回路径。** Spring 按 HTTP 方法和路径找到健康检查方法。它向数据库发送一次轻量查询，得到结果后返回状态。MVC 把这个 Java 返回值写入 HTTP 响应。测试端的 `BodyHandlers.ofString()` 才负责把响应正文读成 Java 字符串。因此，收到一个字符串只说明通信已经结束；还要断言状态码和返回格式，才能确认服务履行了接口约定。
 
+![健康检查时，Spring 向 PostgreSQL 发送 SELECT 1；查询成功返回 200 和 UP，数据库访问异常返回 503 和 DOWN。](./figures/00-request.svg)
+
 来源：`backend/src/main/java/dev/conduit/common/HealthController.java`
 
 ```java

@@ -6,9 +6,9 @@ import { avatar } from './lib/avatar'
 import { LoginPage, RegisterPage, SettingsPage } from './pages/AccountPages'
 import { HomePage, TagPage } from './pages/HomePage'
 import { EditorPage } from './pages/EditorPage'
-import { ArticlePage } from './pages/ArticlePage'
 import { ProfilePage } from './pages/ProfilePage'
 
+const ArticlePage = lazy(() => import('./pages/ArticlePage').then(module => ({ default: module.ArticlePage })))
 const TutorialIndex = lazy(() => import('./tutorial/Tutorial').then(module => ({ default: module.TutorialIndex })))
 const TutorialChapter = lazy(() => import('./tutorial/Tutorial').then(module => ({ default: module.TutorialChapter })))
 

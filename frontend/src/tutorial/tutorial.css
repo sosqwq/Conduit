@@ -1,51 +1,150 @@
 .tutorial-page {
-  --tutorial-accent: #28613e;
-  --tutorial-border: #d8e3da;
-  margin: 2.5rem auto 4rem;
-  max-width: 76rem;
-  padding: 0 clamp(1rem, 4vw, 3rem);
-  color: #26362c;
-  line-height: 1.75;
+  --tutorial-code-bg: #20322d;
+  width: min(var(--skin-width), calc(100% - 2 * var(--skin-gutter)));
+  margin: clamp(2rem, 5vw, 4rem) auto 0;
+  color: var(--skin-ink);
+  line-height: 1.8;
 }
-.tutorial-page a { color: var(--tutorial-accent); }
-.tutorial-page a:focus-visible { outline: 2px solid var(--tutorial-accent); outline-offset: 3px; }
-.tutorial-page h1, .tutorial-page h2, .tutorial-page h3 { color: #1b3625; line-height: 1.35; }
-.tutorial-page h1 { font-size: clamp(1.8rem, 3.3vw, 2.75rem); }
-.tutorial-page h2 { font-size: 1.45rem; }
-.tutorial-page h3 { font-size: 1.15rem; }
-.tutorial-index { max-width: 60rem; }
-.tutorial-intro { border-bottom: 2px solid var(--tutorial-accent); padding-bottom: 1rem; }
-.tutorial-intro p, .tutorial-group li p { color: #526157; }
-.tutorial-group { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr); padding: 1.25rem 0 .5rem; }
-.tutorial-group h2 { margin-top: .3rem; }
+html[data-skin='dusk'] .tutorial-page { --tutorial-code-bg: #15192a; }
+html[data-skin='dune'] .tutorial-page { --tutorial-code-bg: #352923; }
+.tutorial-page :is(h1, h2, h3) { font-weight: var(--skin-title-weight); line-height: 1.35; letter-spacing: -.022em; }
+.tutorial-page h1 { font-size: clamp(2rem, 4.3vw, 3.5rem); }
+.tutorial-page h2 { font-size: clamp(1.4rem, 2.5vw, 1.8rem); }
+.tutorial-page h3 { font-size: 1.23rem; }
+.tutorial-index { max-width: 56rem; }
+.tutorial-intro {
+  position: relative;
+  isolation: isolate;
+  padding: clamp(1.5rem, 5vw, 3rem);
+  margin-bottom: 1rem;
+  border-radius: var(--skin-radius);
+  color: var(--skin-cover-ink);
+  background: var(--skin-cover);
+}
+.tutorial-intro::before {
+  content: '';
+  position: absolute;
+  z-index: -1;
+  inset: 0;
+  border-radius: inherit;
+  background: var(--skin-engraving);
+  mask-image: linear-gradient(100deg, transparent, #0003 48%, #000);
+}
+.tutorial-intro p { margin: .7rem 0 0; color: var(--skin-cover-muted); }
+.tutorial-group {
+  display: grid;
+  grid-template-columns: 8rem minmax(0, 1fr);
+  align-items: baseline;
+  gap: 1.25rem;
+  padding: 1.7rem 0;
+  border-bottom: 1px solid var(--skin-line);
+}
+.tutorial-group h2 { margin: 0; color: var(--skin-accent); }
 .tutorial-group ul, .tutorial-side ol { list-style: none; margin: 0; padding: 0; }
-.tutorial-group li { padding: .25rem 0 .8rem; margin-bottom: .6rem; border-bottom: 1px solid var(--tutorial-border); }
-.tutorial-group li a { font-weight: 650; font-size: 1.08rem; }
-.tutorial-group li p { margin: .3rem 0 0; }
-.tutorial-reader { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: clamp(1.5rem, 4vw, 4rem); }
-.tutorial-side { position: sticky; top: 1.5rem; align-self: start; border-left: 2px solid var(--tutorial-border); font-size: .92rem; }
-.tutorial-side a { display: block; padding: .35rem .8rem; }
-.tutorial-side [aria-current="page"] { color: #173e25; font-weight: 700; background: #eaf3eb; }
-.tutorial-index-link { font-weight: 700; margin-bottom: .4rem; }
-.tutorial-body, .tutorial-prose { min-width: 0; }
-.tutorial-prose { overflow-wrap: anywhere; }
-.tutorial-prose:focus { outline: none; }
-.tutorial-prose h1 { padding-bottom: .8rem; border-bottom: 2px solid var(--tutorial-accent); }
+.tutorial-group li + li { border-top: 1px solid var(--skin-line); }
+.tutorial-group li { position: relative; padding: .85rem 2rem .85rem 0; }
+.tutorial-group li::after {
+  content: '';
+  position: absolute;
+  top: 1.4rem;
+  right: .55rem;
+  width: .48rem;
+  height: .48rem;
+  border: solid var(--skin-accent);
+  border-width: 1.5px 1.5px 0 0;
+  transform: rotate(45deg);
+  transition: transform .16s ease;
+  pointer-events: none;
+}
+.tutorial-group li:is(:hover, :focus-within)::after { transform: translateX(3px) rotate(45deg); }
+.tutorial-group li a { color: var(--skin-ink); font-size: 1.08rem; font-weight: 650; }
+.tutorial-group li a:is(:hover, :focus-visible) { color: var(--skin-accent); }
+.tutorial-group li p { margin: .2rem 0 0; color: var(--skin-muted); font-size: .95rem; }
+
+.tutorial-reader { display: grid; grid-template-columns: minmax(12rem, 15rem) minmax(0, 1fr); gap: clamp(1.5rem, 5vw, 4.5rem); }
+.tutorial-side {
+  position: sticky;
+  top: 1rem;
+  align-self: start;
+  padding: .8rem;
+  max-height: calc(100vh - 2rem);
+  overflow: auto;
+  border-radius: var(--skin-radius);
+  border: 1px solid var(--skin-line);
+  background: var(--skin-surface);
+  font-size: .88rem;
+}
+.tutorial-side a { display: block; margin: 2px; padding: .42rem .55rem; color: var(--skin-muted); }
+.tutorial-side a:hover { color: var(--skin-accent); }
+.tutorial-side [aria-current='page'] {
+  border-inline-start: 3px solid var(--skin-accent);
+  color: var(--skin-accent);
+  background: var(--skin-soft);
+  font-weight: 700;
+}
+.tutorial-side .tutorial-index-link { margin-bottom: .5rem; padding-bottom: .65rem; border-bottom: 1px solid var(--skin-line); color: var(--skin-ink); font-weight: 700; }
+.tutorial-body { min-width: 0; max-width: 50rem; }
+.tutorial-prose { min-width: 0; overflow-wrap: anywhere; }
+.tutorial-prose h1 { margin: -.12em 0 1.15rem; padding-bottom: .9rem; border-bottom: 2px solid var(--skin-accent); }
 .tutorial-prose h2 { margin: 2.5rem 0 1rem; }
 .tutorial-prose h3 { margin: 1.6rem 0 .6rem; }
-.tutorial-prose li { margin-bottom: .4rem; }
-.tutorial-prose table { display: block; overflow-x: auto; border-collapse: collapse; margin: 1.2rem 0; }
-.tutorial-prose th, .tutorial-prose td { text-align: left; vertical-align: top; padding: .5rem .7rem; border: 1px solid var(--tutorial-border); }
-.tutorial-prose th { background: #edf3ee; color: #203e2b; }
-.tutorial-prose code { white-space: normal; color: #274d35; background: #edf3ee; }
-.tutorial-prose pre { overflow-x: auto; background: #f6f8fa; border: 1px solid var(--tutorial-border); border-radius: .35rem; padding: .8rem 1rem; }
-.tutorial-prose pre code { display: block; overflow: visible; padding: 0; background: transparent; color: #24292f; white-space: pre; word-break: normal; overflow-wrap: normal; }
-.tutorial-source { font-size: .84rem; color: #465a4b; margin: 1rem 0 .35rem; }
-.tutorial-pager { display: flex; flex-wrap: wrap; justify-content: space-between; border-top: 1px solid var(--tutorial-border); margin-top: 2.5rem; padding-top: 1.2rem; gap: 1rem; }
+.tutorial-prose ul, .tutorial-prose ol { padding-inline-start: 1.55rem; margin-bottom: 1rem; }
+.tutorial-prose ul { list-style: disc; }
+.tutorial-prose ol { list-style: decimal; }
+.tutorial-prose li { margin-block: .35rem; }
+.tutorial-prose img { max-width: 100%; height: auto; }
+.tutorial-prose a, .tutorial-pager a { text-decoration: underline; }
+.tutorial-prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1.2rem 0; }
+.tutorial-prose th, .tutorial-prose td { text-align: left; vertical-align: top; padding: .55rem .8rem; border: 1px solid var(--skin-line); }
+.tutorial-prose th { background: var(--skin-soft); color: var(--skin-ink); }
+.tutorial-prose :not(pre) > code {
+  padding: .08rem .33rem;
+  border-radius: 3px;
+  color: var(--skin-accent);
+  background: var(--skin-soft);
+  white-space: normal;
+}
+.tutorial-prose blockquote { margin: 1.1rem 0; padding: .25rem 1rem; border-left: 3px solid var(--skin-control); color: var(--skin-muted); }
+.tutorial-prose blockquote p:last-child { margin-bottom: 0; }
+.tutorial-prose pre {
+  overflow-x: auto;
+  margin: 1rem 0;
+  padding: clamp(.85rem, 2.5vw, 1.4rem);
+  border: 1px solid var(--skin-line);
+  border-radius: var(--skin-radius);
+  background: var(--tutorial-code-bg);
+}
+.tutorial-prose pre code {
+  display: block;
+  overflow: visible;
+  padding: 0;
+  background: transparent;
+  color: #eeeee8;
+  font: .89rem/1.7 ui-monospace, 'SFMono-Regular', Consolas, monospace;
+  white-space: pre;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+.tutorial-prose .hljs :is(.hljs-keyword, .hljs-doctag, .hljs-type, .hljs-template-tag, .hljs-template-variable, .hljs-variable.language_) { color: #ffa8ad; }
+.tutorial-prose .hljs .hljs-title { color: #dec1ff; }
+.tutorial-prose .hljs :is(.hljs-attr, .hljs-attribute, .hljs-literal, .hljs-meta, .hljs-number, .hljs-operator, .hljs-variable, .hljs-selector-attr, .hljs-selector-class, .hljs-selector-id, .hljs-section) { color: #acd8ff; }
+.tutorial-prose .hljs :is(.hljs-regexp, .hljs-string, .hljs-name, .hljs-quote, .hljs-selector-tag, .hljs-selector-pseudo) { color: #b8e4ac; }
+.tutorial-prose .hljs :is(.hljs-built_in, .hljs-symbol, .hljs-bullet) { color: #ffce8c; }
+.tutorial-prose .hljs :is(.hljs-comment, .hljs-code, .hljs-formula) { color: #bbc4bf; }
+.tutorial-prose .hljs :is(.hljs-subst, .hljs-emphasis, .hljs-strong) { color: #eeeee8; }
+.tutorial-prose .hljs .hljs-addition { color: #c0efb7; background: #294b31; }
+.tutorial-prose .hljs .hljs-deletion { color: #ffccce; background: #613438; }
+.tutorial-source { color: var(--skin-muted); font-size: .86rem; margin: 1rem 0 .35rem; }
+.tutorial-pager { display: flex; flex-wrap: wrap; justify-content: space-between; border-top: 1px solid var(--skin-line); margin-top: 2.5rem; padding-top: 1.2rem; gap: 1rem; }
+
 @media (max-width: 48rem) {
-  .tutorial-page { margin-top: 1.5rem; }
   .tutorial-group, .tutorial-reader { display: block; }
-  .tutorial-group h2 { margin-bottom: .9rem; }
-  .tutorial-side { position: static; margin-bottom: 1.4rem; }
-  .tutorial-side ol { display: grid; grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr)); }
+  .tutorial-group { padding: 1.15rem 0; }
+  .tutorial-group h2 { margin-bottom: .3rem; }
+  .tutorial-side { position: static; margin-bottom: 1.5rem; padding: .55rem .75rem; }
+  .tutorial-side ol { display: flex; gap: .4rem; overflow-x: auto; padding: .2rem .25rem .55rem; }
+  .tutorial-side li { flex: 0 0 auto; }
+  .tutorial-side li a { margin: 0; white-space: nowrap; }
+  .tutorial-side [aria-current='page'] { border-inline-start: 0; box-shadow: inset 0 -2px var(--skin-accent); }
+  .tutorial-side .tutorial-index-link { margin-bottom: .25rem; }
 }

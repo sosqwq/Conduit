@@ -31,6 +31,19 @@ function open(path: string, respond: (url: URL, options?: RequestInit) => Respon
 
 afterEach(() => { localStorage.clear(); vi.unstubAllGlobals() })
 
+it('links the cover to the feed and gives readers a real destination when the publication is empty', async () => {
+  open('/', url => Response.json(url.pathname === '/api/tags' ? { tags: [] } : { articles: [], articlesCount: 0 }))
+  const cover = screen.getByRole('heading', { name: 'conduit', level: 1 }).closest<HTMLElement>('.banner')!
+  expect(cover).toHaveTextContent('A place to share your knowledge.')
+  const feed = screen.getByRole('region', { name: 'Article feed' })
+  expect(feed).toHaveAttribute('id', 'article-feed')
+  expect(within(cover).getByRole('link', { name: 'Browse articles' })).toHaveAttribute('href', '#article-feed')
+  const empty = (await screen.findByText('No articles here yet.')).closest<HTMLElement>('.empty-feed-message')!
+  expect(within(empty).getByRole('link', { name: 'Read the tutorial' })).toHaveAttribute('href', '/tutorial')
+  const topics = screen.getByRole('complementary', { name: 'Popular tags' })
+  expect(within(topics).getByText('Tags will appear here as articles are published.')).toBeVisible()
+})
+
 it('uses the encoded tag and URL page, resets when switching tabs, and restores browser history', async () => {
   const calls: URL[] = []
   open('/tag/Java%20API?page=2', url => {

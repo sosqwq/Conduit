@@ -1,9 +1,24 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-skin="grove">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#5cb85c" />
+    <meta name="theme-color" content="#f8f7f0" data-grove="#f8f7f0" data-dusk="#111621" data-dune="#f7eee0" />
+    <script>
+      // Apply the saved appearance before the browser paints or React loads.
+      (() => {
+        const root = document.documentElement
+        let reduced = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches ?? false
+        try {
+          const skin = localStorage.getItem('conduit.skin')
+          if (skin === 'dusk' || skin === 'dune') root.dataset.skin = skin
+          reduced = reduced || localStorage.getItem('conduit.reduceMotion') === 'true'
+        } catch { /* Storage can be unavailable in private browsing. */ }
+        root.dataset.motion = reduced ? 'reduced' : 'full'
+        const meta = document.querySelector('meta[name="theme-color"]')
+        meta.content = meta.dataset[root.dataset.skin]
+      })()
+    </script>
     <title>Conduit</title>
   </head>
   <body><div id="root"></div><script type="module" src="/src/main.tsx"></script></body>

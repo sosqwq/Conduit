@@ -1,5 +1,6 @@
 import { lazy, Suspense, type ReactNode } from 'react'
 import { Link, Navigate, NavLink, Route, Routes, useSearchParams } from 'react-router-dom'
+import { Appearance } from './appearance/Appearance'
 import { useSession } from './auth/session'
 import { avatar } from './lib/avatar'
 import { LoginPage, RegisterPage, SettingsPage } from './pages/AccountPages'
@@ -34,6 +35,7 @@ function Navbar() {
         {status === 'unavailable' && <button type="button" onClick={retry}>Retry</button>}
       </li>}
     </ul>
+    <Appearance />
   </div></nav>
 }
 

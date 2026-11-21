@@ -6,6 +6,7 @@ import { App } from './App'
 import './official/styles.css'
 import 'highlight.js/styles/github.css'
 import './appearance/fonts/fonts.css'
+import './appearance/covers/covers.css'
 import './site.css'
 
 const client = new QueryClient({

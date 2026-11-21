@@ -64,6 +64,7 @@ function ArticleDetail({ slug }: { slug: string }) {
       <div className="container page">
         <RequestErrors error={remove.error} />
         <div className="article-content row"><div className="col-md-12">
+          <span className="reading-progress" aria-hidden="true" />
           <Markdown remarkPlugins={[remarkGfm]} skipHtml>{article.body}</Markdown>
           <div className="tag-list">{article.tagList.map(tag =>
             <Link key={tag} className="tag-default tag-pill tag-outline" to={tagHref(tag)}>{tag}</Link>)}</div>

@@ -1,0 +1,30 @@
+/* A supported browser measures the chapter itself, so comments and navigation
+   do not count toward reading progress. */
+.reading-progress { display: none; }
+
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    html:not([data-motion='reduced']) :is(.tutorial-prose, .article-content) {
+      view-timeline-name: --reading-content;
+      view-timeline-axis: block;
+    }
+    html:not([data-motion='reduced']) .reading-progress {
+      display: block;
+      position: fixed;
+      z-index: 100;
+      inset: 0 0 auto;
+      block-size: 3px;
+      pointer-events: none;
+      background: var(--skin-accent);
+      transform-origin: left;
+      animation: reading-progress 1s linear both;
+      animation-timeline: --reading-content;
+      animation-range: contain 0% contain 100%;
+    }
+  }
+}
+
+@keyframes reading-progress {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

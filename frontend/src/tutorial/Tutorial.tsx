@@ -83,6 +83,7 @@ export function TutorialChapter() {
       </nav>
       <div className="tutorial-body">
         <article className="tutorial-prose" ref={article} tabIndex={-1}>
+          <span className="reading-progress" aria-hidden="true" />
           <Markdown remarkPlugins={[remarkGfm]} components={{ code: TutorialCode, p: Paragraph }}>
             {current.markdown}
           </Markdown>

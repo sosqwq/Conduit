@@ -2,6 +2,8 @@
 
 Conduit 是一个可用来学习全栈开发的博客。作者可以发布 Markdown 文章并与读者讨论，读者可以关注作者、收藏文章，或按标签查找内容。后端使用 Java 25、Spring Boot 和 PostgreSQL，前端使用 React 和 TypeScript。公开的中文教程逐章对应本仓库实现。
 
+教程的十章各有一张 SVG 图解。可以从一次健康检查开始，沿着实际代码读到登录、发文、收藏和部署。[按问题查找图解与对应章节](docs/tutorial-diagrams.md)。
+
 在导航栏的 **Appearance** 中可以切换山野手记、午夜星图和赤陶沙丘三套皮肤，也可以开启减少动效。[查看三套皮肤的桌面与手机预览](docs/appearance/README.md)。
 
 ## 用 Docker 本地启动完整网站

@@ -73,6 +73,8 @@ jsonpath "$.articles[0].slug" == "{{slug1}}"
         return new Page(summaries, total);
 ```
 
+![作者 lin 有四篇匹配文章。跳过第一篇、取两篇时，本页包含 ID 84 和 73，它们的标签通过一次查询取回，总篇数仍为四。](./figures/04-feed.svg)
+
 **按查看者组装摘要。** 页查询选取的是作者公开字段与文章标量，显式省略正文。下面三个表达式一次返回“查看者关注作者吗”“查看者收藏了本文吗”和“共有几人收藏本文”。匿名时查看者参数为 SQL NULL，与之相等的关系不存在，因此两个 `EXISTS` 都得到假，公开收藏数仍可读取。它们是同一条 SQL 的子查询，数据库可以在内部为多行执行相应操作，但 Java 程序无需为每篇文章单独发请求。
 
 来源：`backend/src/main/java/dev/conduit/article/ArticleListRepository.java`

@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 448" role="img" aria-labelledby="title desc" lang="zh-CN">
+  <title id="title">同一筛选结果的总数和页内标签</title>
+  <desc id="desc">作者 lin 的四篇文章依次为 91、84、73 和 62。offset=1、limit=2 得到 84 和 73；应用用这两个 ID 一次查回各自的有序标签，并返回两篇摘要与总数四。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <rect class="paper" width="480" height="448"/>
+  <g class="line">
+    <path d="M21 25h22l-8 9v8l-6-3v-5z"/>
+  </g>
+  <text x="52" y="39" class="label">筛选作者 lin</text>
+  <text x="454" y="39" text-anchor="end" class="note">按发布时间从新到旧</text>
+  <path class="line" d="M39 87v-9h402v9"/>
+  <rect x="148" y="62" width="183" height="28" class="paper"/>
+  <text x="239" y="82" text-anchor="middle" class="mono">articlesCount = 4</text>
+
+  <g text-anchor="middle">
+    <rect class="panel" x="20" y="99" width="105" height="49" rx="5"/>
+    <text x="72.5" y="130" class="mono">ID 91</text>
+    <rect class="green" x="132" y="99" width="216" height="49" rx="5"/>
+    <path class="line" d="M240 106v34" opacity=".65"/>
+    <text x="186" y="130" class="mono">ID 84</text>
+    <text x="294" y="130" class="mono">ID 73</text>
+    <rect class="panel" x="355" y="99" width="105" height="49" rx="5"/>
+    <text x="407.5" y="130" class="mono">ID 62</text>
+    <text x="72.5" y="174" class="note">跳过 1 篇</text>
+    <text x="407.5" y="174" class="note">留到下页</text>
+  </g>
+  <path class="line" d="M137 157v10h206v-10"/>
+  <text x="240" y="194" text-anchor="middle" class="label">本页取 2 篇</text>
+  <text x="240" y="218" text-anchor="middle" class="mono">offset=1 · limit=2</text>
+  <path class="line" d="M240 229v19m-4-5 4 5 4-5"/>
+
+  <rect x="20" y="257" width="440" height="140" rx="9" class="panel"/>
+  <path class="line" d="M20 298h440"/>
+  <g class="line">
+    <path d="M39 271h13l7 7-12 12-9-9z"/><circle cx="44" cy="276" r="1" fill="var(--edge)"/>
+  </g>
+  <text x="70" y="285" class="label">按本页 ID 一次取回标签</text>
+  <text x="41" y="329" class="mono">84</text>
+  <path class="line" d="M75 324h27m-4-4 4 4-4 4"/>
+  <rect x="115" y="309" width="63" height="29" rx="14.5" class="blue"/>
+  <text x="146.5" y="329" text-anchor="middle" class="mono">java</text>
+  <rect x="185" y="309" width="66" height="29" rx="14.5" class="blue"/>
+  <text x="218" y="329" text-anchor="middle" class="mono">jdbc</text>
+  <text x="41" y="373" class="mono">73</text>
+  <path class="line" d="M75 368h27m-4-4 4 4-4 4"/>
+  <rect x="115" y="353" width="63" height="29" rx="14.5" class="blue"/>
+  <text x="146.5" y="373" text-anchor="middle" class="mono">web</text>
+  <path class="line" d="M279 313v66" opacity=".45"/>
+  <text x="297" y="335" class="note">每篇的标签按</text>
+  <text x="297" y="361" class="note"><tspan class="mono">position</tspan> 排列</text>
+  <text x="240" y="428" text-anchor="middle" class="label">响应返回 2 篇摘要，匹配总数仍是 4。</text>
+</svg>

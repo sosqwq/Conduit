@@ -1,0 +1,60 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 480 414" role="img" aria-labelledby="title desc" lang="zh-CN">
+  <title id="title">一次改名，两种文章标识</title>
+  <desc id="desc">文章 42 的标题从 Field Guide 改为 FIELD GUIDE!。两者的前缀相同，新 slug 使用 field-guide-edit-42。文章标签、评论和收藏的外键 article_id 始终为 42。</desc>
+<style>
+  svg { --paper:#f8f6ee; --ink:#202e2b; --muted:#485b54; --edge:#61756c; --panel:#fffdf6; --green:#225d4c; --green-bg:#dfede1; --amber:#874b25; --amber-bg:#f5e5cd; --blue:#405c87; --blue-bg:#e7edf5; }
+  @media (prefers-color-scheme: dark) {
+    svg { --paper:#181e2c; --ink:#f0f2f7; --muted:#bfcbcc; --edge:#8d9ba7; --panel:#212b3a; --green:#9ddfc3; --green-bg:#253e39; --amber:#f3c39b; --amber-bg:#42342e; --blue:#b3ceff; --blue-bg:#2a374e; }
+  }
+  text { font-family:system-ui,-apple-system,"Segoe UI","Noto Sans CJK SC","Microsoft YaHei",sans-serif; fill:var(--ink); }
+  .label { font-size:18px; font-weight:650; }
+  .note { font-size:15px; fill:var(--muted); }
+  .mono { font: 15px ui-monospace,"DejaVu Sans Mono",monospace; fill:var(--ink); }
+  .paper { fill:var(--paper); }
+  .panel { fill:var(--panel); stroke:var(--edge); stroke-width:1.4; }
+  .green { fill:var(--green-bg); stroke:var(--green); stroke-width:1.6; }
+  .amber { fill:var(--amber-bg); stroke:var(--amber); stroke-width:1.6; }
+  .blue { fill:var(--blue-bg); stroke:var(--blue); stroke-width:1.6; }
+  .line { fill:none; stroke:var(--edge); stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
+</style>
+  <rect class="paper" width="480" height="414"/>
+  <g class="line" stroke-width="2">
+    <path d="M24 33l4-4a5 5 0 0 1 7 7l-3 3 M26 42l-3 3a5 5 0 1 1-7-7l4-4 M22 39l7-7"/>
+  </g>
+  <text x="46" y="40" class="label">公开地址</text>
+  <text x="48" y="75" class="note">标题</text>
+  <text x="248" y="75" class="note">地址中的 slug</text>
+  <path class="line" d="M27 100v59m-4-5 4 5 4-5"/>
+  <circle cx="27" cy="99" r="4" fill="var(--edge)"/>
+  <text x="48" y="106" class="label" font-weight="600">Field Guide</text>
+  <text x="248" y="106" class="mono">field-guide-42</text>
+  <path class="line" d="M48 128h405" stroke-dasharray="2 5" opacity=".55"/>
+  <text x="48" y="169" class="label" font-weight="600">FIELD GUIDE!</text>
+  <rect x="239" y="144" width="210" height="34" rx="5" class="amber"/>
+  <text x="248" y="166" class="mono">field-guide-<tspan font-weight="bold">edit</tspan>-42</text>
+  <text x="48" y="201" class="note">新旧标题的前缀相同，改名后加上 -edit-。</text>
+
+  <path class="line" d="M23 224h434" opacity=".55"/>
+  <g class="line">
+    <circle cx="24" cy="255" r="5"/><path d="M29 255h10l3 3-3 3-3-3-3 3-3-3"/>
+  </g>
+  <text x="49" y="261" class="label">数据库中的文章</text>
+  <rect x="269" y="235" width="184" height="38" rx="19" class="green"/>
+  <text x="361" y="260" text-anchor="middle" class="mono">articles.id = 42</text>
+  <g class="line">
+    <path d="M361 273v23H81v27m158-27v27m161-27h-39m39 0v27"/>
+    <circle cx="239" cy="296" r="3" fill="var(--edge)"/>
+    <circle cx="361" cy="296" r="3" fill="var(--edge)"/>
+  </g>
+  <g text-anchor="middle">
+    <rect x="13" y="324" width="137" height="69" rx="7" class="panel"/>
+    <text x="81.5" y="351" class="label">文章标签</text>
+    <text x="81.5" y="376" class="mono">article_id=42</text>
+    <rect x="171" y="324" width="137" height="69" rx="7" class="panel"/>
+    <text x="239.5" y="351" class="label">评论</text>
+    <text x="239.5" y="376" class="mono">article_id=42</text>
+    <rect x="331" y="324" width="137" height="69" rx="7" class="panel"/>
+    <text x="399.5" y="351" class="label">收藏</text>
+    <text x="399.5" y="376" class="mono">article_id=42</text>
+  </g>
+</svg>

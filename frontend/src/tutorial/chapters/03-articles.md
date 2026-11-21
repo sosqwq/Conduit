@@ -132,6 +132,8 @@ HTTP 200
 
 改名还有一个边界。把 `Field Guide` 改成 `FIELD GUIDE!`，可见标题变了，但两个前缀完全一样。`Article.revise` 先计算通常的候选 slug；如果它等于当前地址，则本次改用带 `-edit-` 的版本，以保证此次改名后地址真的发生变化。若只改正文，标题相等，整段换地址的逻辑都不会执行。
 
+![文章 42 从 Field Guide 改名为 FIELD GUIDE! 后，slug 变为 field-guide-edit-42，标签、评论和收藏仍引用同一个文章主键。](./figures/03-article.svg)
+
 **删除。** 更新与删除共用 `owned`。`lockBySlug` 在事务内以写锁读取文章，找不到目标就返回 404。有目标后，再把作者主键与当前用户主键比较。即使两个浏览器同时编辑同一篇文章，它们也要先后取得这篇文章的锁。锁只负责并发顺序，身份比对才决定能否写入。
 
 来源：`backend/src/main/java/dev/conduit/article/ArticleService.java`

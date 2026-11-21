@@ -24,9 +24,9 @@
   border-color: var(--skin-accent, #305848);
   background: var(--skin-soft, #eef0e7);
 }
-.appearance-trigger:focus-visible, .appearance-choice input:focus-visible + .appearance-option,
-.appearance-motion input:focus-visible ~ .appearance-motion input { top: calc(50% + .32rem); right: .2rem; width: 33px; height: 20px; }
-.appearance-switch {
+.appearance-trigger:focus-visible,
+.appearance-choice input:focus-visible + .appearance-option,
+.appearance-motion input:focus-visible ~ .appearance-switch {
   outline: 2px solid var(--skin-accent, #305848);
   outline-offset: 3px;
 }
@@ -153,6 +153,12 @@
   margin: .65rem 0 0;
   border-top: 1px solid var(--skin-line, #ced3c9);
   cursor: pointer;
+}
+.appearance-motion input {
+  top: calc(50% + .32rem);
+  right: .2rem;
+  width: 33px;
+  height: 20px;
 }
 .appearance-switch {
   position: relative;

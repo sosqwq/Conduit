@@ -1,7 +1,7 @@
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-import { cleanup, render, screen, within } from '@testing-library/react'
+import { act, cleanup, render, screen, within } from '@testing-library/react'
 import { MemoryRouter } from 'react-router-dom'
-import { afterEach, expect, it } from 'vitest'
+import { afterEach, expect, it, vi } from 'vitest'
 import { App } from '../App'
 import { SessionProvider } from '../auth/session'
 
@@ -19,6 +19,8 @@ it.each([
       </MemoryRouter>
     </QueryClientProvider>,
   )
+  // The application lazy-loads the tutorial route before rendering its landmarks.
+  await act(() => vi.dynamicImportSettled())
   await screen.findByRole('heading', { name: title, level: 1 })
   const landmarks = screen.getAllByRole('main')
   expect(landmarks).toHaveLength(1)

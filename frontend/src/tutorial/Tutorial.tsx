@@ -7,8 +7,35 @@ import { chapters, groups } from './catalog'
 import { TutorialCode } from './TutorialCode'
 import './tutorial.css'
 
+interface Diagram {
+  url: string
+  title: string
+  width: number
+  height: number
+}
+
+const diagrams = import.meta.glob<Diagram>('./chapters/figures/*.svg', {
+  eager: true, query: '?tutorial-figure', import: 'default',
+})
+
 function Paragraph({ node, children }: ComponentProps<'p'> & ExtraProps) {
   const first = node?.children[0]
+  if (node?.children.length === 1 && first?.type === 'element' && first.tagName === 'img') {
+    const { src, alt } = first.properties
+    if (typeof src === 'string' && src.startsWith('./figures/') && typeof alt === 'string') {
+      const diagram = diagrams[`./chapters/${src.slice(2)}`]
+      if (diagram) return (
+        <figure className="tutorial-figure">
+          <figcaption>
+            <strong>{diagram.title}</strong>
+            <a href={diagram.url}>查看原图<span aria-hidden="true"> ↗</span></a>
+          </figcaption>
+          <img src={diagram.url} alt={alt} width={diagram.width} height={diagram.height} loading="lazy" />
+          <p aria-hidden="true">{alt}</p>
+        </figure>
+      )
+    }
+  }
   const source = first?.type === 'text' && first.value.trim() === '来源：'
   return <p className={source ? 'tutorial-source' : undefined}>{children}</p>
 }

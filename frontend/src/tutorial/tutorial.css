@@ -93,6 +93,40 @@ html[data-skin='dune'] .tutorial-page { --tutorial-code-bg: #352923; }
 .tutorial-prose ol { list-style: decimal; }
 .tutorial-prose li { margin-block: .35rem; }
 .tutorial-prose img { max-width: 100%; height: auto; }
+.tutorial-figure {
+  position: relative;
+  max-width: 40rem;
+  margin: 1.6rem 0 2rem;
+  overflow: hidden;
+  border: 1px solid var(--skin-control);
+  border-radius: var(--skin-radius);
+  background: #f8f6ee;
+}
+html[data-skin='dusk'] .tutorial-figure { background: #181e2c; }
+.tutorial-figure figcaption {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: .25rem 1rem;
+  padding: .75rem 1rem;
+  background: var(--skin-surface);
+  border-bottom: 1px solid var(--skin-line);
+}
+.tutorial-figure figcaption strong { font-size: 1.05rem; }
+.tutorial-figure figcaption a { color: var(--skin-accent); font-size: .9rem; white-space: nowrap; }
+.tutorial-figure figcaption a::after { content: ''; position: absolute; inset: 0; cursor: zoom-in; }
+.tutorial-figure:focus-within { outline: 2px solid var(--skin-accent); outline-offset: 3px; }
+.tutorial-figure img { width: min(100%, 34rem); display: block; margin-inline: auto; }
+.tutorial-figure > p {
+  margin: 0;
+  padding: .75rem 1rem;
+  border-top: 1px solid var(--skin-line);
+  background: var(--skin-surface);
+  color: var(--skin-muted);
+  font-size: .92rem;
+  line-height: 1.6;
+}
 .tutorial-prose a, .tutorial-pager a { text-decoration: underline; }
 .tutorial-prose table { display: block; width: fit-content; max-width: 100%; overflow-x: auto; border-collapse: collapse; margin: 1.2rem 0; }
 .tutorial-prose th, .tutorial-prose td { text-align: left; vertical-align: top; padding: .55rem .8rem; border: 1px solid var(--skin-line); }

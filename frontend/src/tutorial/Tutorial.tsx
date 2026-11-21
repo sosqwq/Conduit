@@ -1,5 +1,5 @@
-import { useEffect, useRef, type ComponentProps } from 'react'
-import { Link, useParams } from 'react-router-dom'
+import { useLayoutEffect, useRef, type ComponentProps } from 'react'
+import { Link, useLocation, useNavigationType, useParams } from 'react-router-dom'
 import Markdown from 'react-markdown'
 import type { ExtraProps } from 'react-markdown'
 import remarkGfm from 'remark-gfm'
@@ -48,15 +48,14 @@ export function TutorialChapter() {
   const previous = chapters[index - 1]
   const next = index >= 0 ? chapters[index + 1] : undefined
   const article = useRef<HTMLElement>(null)
-  const lastId = useRef(id)
+  const { hash } = useLocation()
+  const navigation = useNavigationType()
 
-  useEffect(() => {
-    if (lastId.current !== id) {
-      article.current?.focus({ preventScroll: true })
-      document.documentElement.scrollTop = 0
-      lastId.current = id
-    }
-  }, [id])
+  useLayoutEffect(() => {
+    if (navigation !== 'PUSH' || hash) return
+    article.current?.focus({ preventScroll: true })
+    document.documentElement.scrollTop = 0
+  }, [id, hash, navigation])
 
   if (!current) {
     return (
